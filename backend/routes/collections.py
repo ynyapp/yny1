@@ -2,14 +2,14 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 from typing import List, Optional
 from datetime import datetime
 from motor.motor_asyncio import AsyncIOMotorDatabase
-from ..models.collection import Collection, CollectionCreate, CollectionResponse
+from models.collection import Collection, CollectionCreate, CollectionResponse
 import os
 from bson import ObjectId
 
 router = APIRouter(prefix="/api/collections", tags=["collections"])
 
 def get_db():
-    from ..server import db
+    from server import db
     return db
 
 @router.get("/", response_model=List[CollectionResponse])
