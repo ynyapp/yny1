@@ -259,38 +259,46 @@ const RestaurantDetailPage = () => {
               </div>
             </div>
 
-            <div className="space-y-4">
-              {mockReviews.map(review => (
-                <div key={review.id} className="bg-white rounded-xl p-6">
-                  <div className="flex items-start gap-4">
-                    <img
-                      src={review.avatar}
-                      alt={review.userName}
-                      className="w-12 h-12 rounded-full"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-semibold text-gray-900">{review.userName}</h4>
-                        <span className="text-sm text-gray-500">{review.date}</span>
+            {reviews.length === 0 ? (
+              <div className="bg-white rounded-xl p-12 text-center">
+                <p className="text-gray-500">Henüz yorum yapılmamış.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {reviews.map(review => (
+                  <div key={review.id} className="bg-white rounded-xl p-6">
+                    <div className="flex items-start gap-4">
+                      <img
+                        src={review.userAvatar || `https://i.pravatar.cc/150?u=${review.userId}`}
+                        alt={review.userName}
+                        className="w-12 h-12 rounded-full"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="font-semibold text-gray-900">{review.userName}</h4>
+                          <span className="text-sm text-gray-500">
+                            {new Date(review.createdAt).toLocaleDateString('tr-TR')}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1 mb-2">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-4 h-4 ${
+                                i < review.rating
+                                  ? 'fill-yellow-400 text-yellow-400'
+                                  : 'text-gray-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <p className="text-gray-700">{review.comment}</p>
                       </div>
-                      <div className="flex items-center gap-1 mb-2">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${
-                              i < review.rating
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-gray-300'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <p className="text-gray-700">{review.comment}</p>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
