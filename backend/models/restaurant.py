@@ -23,6 +23,11 @@ class RestaurantBase(BaseModel):
     tags: List[str] = []
     minOrder: float = Field(ge=0)
     deliveryFee: float = Field(ge=0)
+    type: str = Field(default="both")  # 'delivery', 'dine-in', 'both'
+    hasDelivery: bool = True
+    hasTableBooking: bool = False
+    phone: Optional[str] = None
+    description: Optional[str] = None
 
 class RestaurantCreate(RestaurantBase):
     pass
