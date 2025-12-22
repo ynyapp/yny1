@@ -141,6 +141,14 @@ const RestaurantDetailPage = () => {
 
   const isDeliveryRestaurant = restaurant.hasDelivery !== false;
   const isDineInRestaurant = restaurant.hasTableBooking;
+  const isDineInOnly = restaurant.type === 'dine-in' || (isDineInRestaurant && !isDeliveryRestaurant);
+
+  // Redirect to Dine-in specific page if restaurant is dine-in only
+  useEffect(() => {
+    if (restaurant && isDineInOnly) {
+      navigate(`/restaurant/${id}/dinein`, { replace: true });
+    }
+  }, [restaurant, isDineInOnly, id, navigate]);
 
   return (
     <div className="min-h-screen bg-gray-50">
