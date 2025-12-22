@@ -240,7 +240,7 @@ frontend:
 
   - task: "Cart and Checkout Flow"
     implemented: true
-    working: false
+    working: true
     file: "/app/frontend/src/pages/CartPage.js"
     stuck_count: 1
     priority: "high"
@@ -249,6 +249,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "Cart persistence issue identified: Items can be added to cart (cart counter updates), but cart appears empty when navigating to cart page. This suggests cart state is not persisting between page navigations or there's a session management issue. Add to cart functionality works (toast notifications show), but cart storage/retrieval needs investigation."
+      - working: true
+        agent: "testing"
+        comment: "RESOLVED: Cart functionality now working correctly. Focused test completed successfully: ✅ Added Whopper Menü (70₺) from Burger King to cart, ✅ Cart counter updated to show '1', ✅ Cart page displays item correctly with name, price, quantity, ✅ Cart total calculated properly (85.00₺ including delivery and service fees), ✅ 'Siparişi Tamamla' button visible and functional. Cart persistence between page navigations working as expected."
 
   - task: "User Profile Management"
     implemented: true
