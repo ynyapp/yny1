@@ -28,6 +28,19 @@ class RestaurantBase(BaseModel):
     hasTableBooking: bool = False
     phone: Optional[str] = None
     description: Optional[str] = None
+    deliveryRadius: float = Field(default=5.0, ge=0)  # km
+    
+    # Amenities
+    amenities: List[str] = []  # wifi, parking, valet, highChairs, bar, outdoorSeating, liveMusic, rooftop
+    
+    # Dietary Options
+    dietaryOptions: List[str] = []  # vegetarian, vegan, glutenFree, halal, kosher
+    
+    # Atmosphere
+    atmosphere: List[str] = []  # casual, romantic, upscale, cozy, trendy, family_friendly
+    
+    # Special Features
+    specialFeatures: List[str] = []  # petFriendly, happyHour, lateNight, breakfast, reservation
 
 class RestaurantCreate(RestaurantBase):
     pass
