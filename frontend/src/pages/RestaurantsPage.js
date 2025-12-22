@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Filter, Star, Clock, MapPin, Search, X } from 'lucide-react';
-import { mockRestaurants, cuisineTypes, turkishCities } from '../mockData';
+import { restaurantsAPI } from '../api';
+import { cuisineTypes, turkishCities } from '../mockData';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Button } from '../components/ui/button';
@@ -11,7 +12,8 @@ import { Slider } from '../components/ui/slider';
 const RestaurantsPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [restaurants, setRestaurants] = useState(mockRestaurants);
+  const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [selectedCity, setSelectedCity] = useState(searchParams.get('city') || 'İstanbul');
   const [selectedCuisines, setSelectedCuisines] = useState([]);
@@ -20,36 +22,31 @@ const RestaurantsPage = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    filterRestaurants();
-  }, [searchQuery, selectedCity, selectedCuisines, priceRange, minRating]);
+    fetchRestaurants();
+  }, [searchQuery, selectedCity, selectedCuisines, minRating]);
 
-  const filterRestaurants = () => {
-    let filtered = [...mockRestaurants];
+  const fetchRestaurants = async () => {
+    try {
+      setLoading(true);
+      const params = {
+        city: selectedCity,
+        search: searchQuery,
+        min_rating: minRating || undefined,
+      };
+      
+      // Add cuisine filter
+      if (selectedCuisines.length > 0) {
+        params.cuisine = selectedCuisines[0]; // API supports single cuisine for now
+      }
 
-    // Search filter
-    if (searchQuery) {
-      filtered = filtered.filter(r => 
-        r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        r.cuisine.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      const data = await restaurantsAPI.getAll(params);
+      setRestaurants(data.items || data);
+    } catch (error) {
+      console.error('Failed to fetch restaurants:', error);
+      setRestaurants([]);
+    } finally {
+      setLoading(false);
     }
-
-    // City filter
-    if (selectedCity) {
-      filtered = filtered.filter(r => r.location.includes(selectedCity));
-    }
-
-    // Cuisine filter
-    if (selectedCuisines.length > 0) {
-      filtered = filtered.filter(r => selectedCuisines.includes(r.cuisine));
-    }
-
-    // Rating filter
-    if (minRating > 0) {
-      filtered = filtered.filter(r => r.rating >= minRating);
-    }
-
-    setRestaurants(filtered);
   };
 
   const toggleCuisine = (cuisine) => {
