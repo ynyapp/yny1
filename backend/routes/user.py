@@ -57,11 +57,19 @@ async def update_profile(user_data: UserUpdate, current_user: dict = Depends(get
         update_data = {k: v for k, v in user_data.dict(exclude_unset=True).items()}
         update_data["updatedAt"] = datetime.utcnow()
         
-        # Update user
+        # Try to update user by string ID first, then by ObjectId
         result = await db.users.update_one(
-            {"_id": ObjectId(current_user["user_id"])},
+            {"_id": current_user["user_id"]},
             {"$set": update_data}
         )
+        
+        if result.modified_count == 0:
+            from bson import ObjectId
+            if ObjectId.is_valid(current_user["user_id"]):
+                result = await db.users.update_one(
+                    {"_id": ObjectId(current_user["user_id"])},
+                    {"$set": update_data}
+                )
         
         if result.modified_count == 0:
             raise HTTPException(
@@ -70,8 +78,17 @@ async def update_profile(user_data: UserUpdate, current_user: dict = Depends(get
             )
         
         # Get updated user
-        user = await db.users.find_one({"_id": ObjectId(current_user["user_id"])})
-        user["id"] = str(user["_id"])
+        user = await db.users.find_one({"_id": current_user["user_id"]})
+        if not user:
+            from bson import ObjectId
+            if ObjectId.is_valid(current_user["user_id"]):
+                user = await db.users.find_one({"_id": ObjectId(current_user["user_id"])})
+        
+        # Convert ObjectId to string if needed
+        if isinstance(user["_id"], ObjectId):
+            user["id"] = str(user["_id"])
+        else:
+            user["id"] = user["_id"]
         del user["password"]
         del user["_id"]
         
