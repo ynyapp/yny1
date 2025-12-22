@@ -7,7 +7,7 @@ import Navbar from '../components/Navbar';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { RadioGroup, RadioGroupItem } from '../components/ui/radio-group';
-import { toast } from '../components/ui/use-toast';
+import { toast } from '../hooks/use-toast';
 import { Toaster } from '../components/ui/toaster';
 
 const CheckoutPage = () => {
