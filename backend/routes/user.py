@@ -15,7 +15,12 @@ async def get_profile(current_user: dict = Depends(get_current_user)):
     try:
         log_request("/api/user/profile", "GET", current_user["user_id"])
         
-        user = await db.users.find_one({"_id": ObjectId(current_user["user_id"])})
+        # Try to find user by string ID first, then by ObjectId
+        user = await db.users.find_one({"_id": current_user["user_id"]})
+        if not user:
+            from bson import ObjectId
+            if ObjectId.is_valid(current_user["user_id"]):
+                user = await db.users.find_one({"_id": ObjectId(current_user["user_id"])})
         
         if not user:
             raise HTTPException(
@@ -23,7 +28,11 @@ async def get_profile(current_user: dict = Depends(get_current_user)):
                 detail="User not found"
             )
         
-        user["id"] = str(user["_id"])
+        # Convert ObjectId to string if needed
+        if isinstance(user["_id"], ObjectId):
+            user["id"] = str(user["_id"])
+        else:
+            user["id"] = user["_id"]
         del user["password"]
         del user["_id"]
         
