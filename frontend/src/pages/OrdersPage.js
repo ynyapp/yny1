@@ -87,7 +87,11 @@ const OrdersPage = () => {
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Siparişlerim</h1>
         
-        {mockOrders.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Yükleniyor...</p>
+          </div>
+        ) : orders.length === 0 ? (
           <div className="bg-white rounded-xl p-12 text-center">
             <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
               <Package className="w-10 h-10 text-gray-400" />
@@ -103,7 +107,7 @@ const OrdersPage = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {mockOrders.map(order => (
+            {orders.map(order => (
               <div key={order.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="p-6">
                   <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
@@ -113,9 +117,9 @@ const OrdersPage = () => {
                         <span className="font-semibold text-sm">{getStatusText(order.status)}</span>
                       </div>
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900">{order.restaurantName}</h3>
+                        <h3 className="text-lg font-bold text-gray-900">Sipariş #{order.orderNumber}</h3>
                         <p className="text-sm text-gray-600">
-                          {new Date(order.date).toLocaleDateString('tr-TR', {
+                          {new Date(order.createdAt).toLocaleDateString('tr-TR', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
