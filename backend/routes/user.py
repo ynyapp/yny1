@@ -63,7 +63,6 @@ async def update_profile(user_data: UserUpdate, current_user: dict = Depends(get
         )
         
         if result.modified_count == 0:
-            from bson import ObjectId
             if ObjectId.is_valid(current_user["user_id"]):
                 result = await db.users.update_one(
                     {"_id": ObjectId(current_user["user_id"])},
@@ -79,7 +78,6 @@ async def update_profile(user_data: UserUpdate, current_user: dict = Depends(get
         # Get updated user
         user = await db.users.find_one({"_id": current_user["user_id"]})
         if not user:
-            from bson import ObjectId
             if ObjectId.is_valid(current_user["user_id"]):
                 user = await db.users.find_one({"_id": ObjectId(current_user["user_id"])})
         
