@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { MapPin, CreditCard, Wallet, Banknote, ArrowLeft, Check } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
+import { ordersAPI } from '../api';
 import Navbar from '../components/Navbar';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -12,29 +13,76 @@ import { Toaster } from '../components/ui/toaster';
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
-  const { cartItems, getCartTotal, clearCart } = useCart();
+  const { cartItems, getCartTotal, clearCart, restaurantId } = useCart();
   const { user } = useAuth();
   const [paymentMethod, setPaymentMethod] = useState('credit-card');
-  const [selectedAddress, setSelectedAddress] = useState('a1');
+  const [selectedAddress, setSelectedAddress] = useState(user?.addresses?.[0]?.id || '');
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const deliveryFee = 10;
   const serviceFee = 5;
   const subtotal = getCartTotal();
   const total = subtotal + deliveryFee + serviceFee;
 
-  const handlePlaceOrder = () => {
-    // Mock order placement
-    setOrderPlaced(true);
-    toast({
-      title: "Sipariş Alındı!",
-      description: "Siparişiniz başarıyla oluşturuldu.",
-    });
-    
-    setTimeout(() => {
-      clearCart();
-      navigate('/orders');
-    }, 2000);
+  const handlePlaceOrder = async () => {
+    try {
+      setLoading(true);
+      
+      const selectedAddressData = user?.addresses?.find(a => a.id === selectedAddress);
+      
+      if (!selectedAddressData) {
+        toast({
+          title: "Hata",
+          description: "Lütfen teslimat adresi seçiniz",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const orderData = {
+        restaurantId: restaurantId,
+        items: cartItems.map(item => ({
+          menuItemId: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity
+        })),
+        deliveryAddress: {
+          title: selectedAddressData.title,
+          address: selectedAddressData.address,
+          coordinates: selectedAddressData.coordinates
+        },
+        paymentMethod: paymentMethod,
+        subtotal: subtotal,
+        deliveryFee: deliveryFee,
+        serviceFee: serviceFee,
+        total: total
+      };
+
+      await ordersAPI.create(orderData);
+      
+      setOrderPlaced(true);
+      toast({
+        title: "Sipariş Alındı!",
+        description: "Siparişiniz başarıyla oluşturuldu.",
+      });
+      
+      setTimeout(() => {
+        clearCart();
+        navigate('/orders');
+      }, 2000);
+      
+    } catch (error) {
+      console.error('Order creation failed:', error);
+      toast({
+        title: "Hata",
+        description: error.response?.data?.detail || "Sipariş oluşturulamadı",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (orderPlaced) {
