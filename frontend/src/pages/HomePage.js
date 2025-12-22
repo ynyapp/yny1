@@ -159,7 +159,7 @@ const HomePage = () => {
                 </div>
                 
                 <div className="flex items-center justify-between mt-3 pt-3 border-t">
-                  <span className="text-sm text-gray-600">{restaurant.location}</span>
+                  <span className="text-sm text-gray-600">{restaurant.location?.address || restaurant.location?.city}</span>
                   <span className="text-sm font-semibold text-gray-700">{restaurant.priceRange}</span>
                 </div>
               </div>
