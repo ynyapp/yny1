@@ -7,7 +7,7 @@ from datetime import datetime
 
 router = APIRouter(prefix="/user", tags=["user"])
 
-from server import db
+from database import db
 
 @router.get("/profile", response_model=UserResponse)
 async def get_profile(current_user: dict = Depends(get_current_user)):
