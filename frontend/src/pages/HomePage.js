@@ -128,8 +128,8 @@ const HomePage = () => {
           {popularRestaurants.map((restaurant) => (
             <div
               key={restaurant.id}
-              onClick={() => navigate(`/restaurant/${restaurant.id}`)}
-              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer transform hover:scale-105"
+              onClick={() => navigate(`/restaurant/${restaurant.slug || restaurant.id}`)}
+              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer transform hover:scale-105 border border-gray-100"
             >
               <div className="relative h-48">
                 <img
@@ -138,8 +138,8 @@ const HomePage = () => {
                   className="w-full h-full object-cover"
                 />
                 {restaurant.discount && (
-                  <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    {restaurant.discount}
+                  <div className="absolute top-3 left-3 bg-blue-600 text-white px-3 py-1 rounded text-sm font-semibold flex items-center gap-1">
+                    💰 {restaurant.discount}
                   </div>
                 )}
                 {!restaurant.isOpen && (
@@ -147,26 +147,26 @@ const HomePage = () => {
                     <span className="text-white font-semibold text-lg">Şu Anda Kapalı</span>
                   </div>
                 )}
+                <div className="absolute top-3 right-3 bg-green-600 text-white px-2 py-1 rounded flex items-center gap-1">
+                  <span className="font-bold text-sm">{restaurant.rating}</span>
+                  <Star className="w-3 h-3 fill-white" />
+                </div>
               </div>
               <div className="p-4">
                 <h3 className="text-lg font-bold text-gray-900 mb-1">{restaurant.name}</h3>
                 <p className="text-sm text-gray-600 mb-3">{restaurant.cuisine}</p>
                 
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="font-semibold">{restaurant.rating}</span>
-                    <span className="text-gray-500">({restaurant.reviewCount})</span>
-                  </div>
+                <div className="flex items-center justify-between text-sm mb-3">
                   <div className="flex items-center gap-1 text-gray-600">
                     <Clock className="w-4 h-4" />
                     <span>{restaurant.deliveryTime}</span>
                   </div>
+                  <span className="text-sm font-semibold text-gray-700">{restaurant.priceRange}</span>
                 </div>
                 
-                <div className="flex items-center justify-between mt-3 pt-3 border-t">
-                  <span className="text-sm text-gray-600">{restaurant.location?.address || restaurant.location?.city}</span>
-                  <span className="text-sm font-semibold text-gray-700">{restaurant.priceRange}</span>
+                <div className="flex items-center justify-between pt-3 border-t">
+                  <span className="text-xs text-gray-500">{restaurant.location?.city}</span>
+                  <span className="text-xs text-gray-500">{restaurant.reviewCount} değerlendirme</span>
                 </div>
               </div>
             </div>
