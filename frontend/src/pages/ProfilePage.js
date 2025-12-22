@@ -7,7 +7,7 @@ import Footer from '../components/Footer';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { toast } from '../components/ui/use-toast';
+import { toast } from '../hooks/use-toast';
 import { Toaster } from '../components/ui/toaster';
 
 const ProfilePage = () => {
