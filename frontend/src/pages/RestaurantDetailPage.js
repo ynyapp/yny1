@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, Clock, MapPin, Phone, ArrowLeft, Plus, Minus } from 'lucide-react';
-import { mockRestaurants, menuItems, mockReviews } from '../mockData';
+import { restaurantsAPI, menuAPI, reviewsAPI } from '../api';
 import { useCart } from '../contexts/CartContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -15,9 +15,74 @@ const RestaurantDetailPage = () => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const [activeTab, setActiveTab] = useState('menu');
+  const [restaurant, setRestaurant] = useState(null);
+  const [menu, setMenu] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
   
-  const restaurant = mockRestaurants.find(r => r.id === id);
-  const menu = menuItems[id] || [];
+  useEffect(() => {
+    loadRestaurantData();
+  }, [id]);
+
+  const loadRestaurantData = async () => {
+    try {
+      setLoading(true);
+      // Try to fetch by slug first, if it fails, try by ID
+      let restaurantData;
+      try {
+        restaurantData = await restaurantsAPI.getBySlug(id);
+      } catch {
+        restaurantData = await restaurantsAPI.getById(id);
+      }
+      
+      setRestaurant(restaurantData);
+      
+      // Load menu
+      const menuData = await menuAPI.getMenu(restaurantData.id);
+      setMenu(menuData);
+      
+      // Load reviews if on reviews tab
+      if (activeTab === 'reviews') {
+        const reviewsData = await reviewsAPI.getByRestaurant(restaurantData.id);
+        setReviews(reviewsData);
+      }
+    } catch (error) {
+      console.error('Failed to load restaurant:', error);
+      toast({
+        title: "Hata",
+        description: "Restoran bilgileri yüklenemedi",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'reviews' && restaurant && reviews.length === 0) {
+      loadReviews();
+    }
+  }, [activeTab]);
+
+  const loadReviews = async () => {
+    try {
+      const reviewsData = await reviewsAPI.getByRestaurant(restaurant.id);
+      setReviews(reviewsData);
+    } catch (error) {
+      console.error('Failed to load reviews:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="container mx-auto px-4 py-20 text-center">
+          <p className="text-gray-600">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
   
   if (!restaurant) {
     return (
