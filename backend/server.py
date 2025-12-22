@@ -62,6 +62,12 @@ api_router.include_router(menu.router)
 api_router.include_router(orders.router)
 api_router.include_router(reviews.router)
 api_router.include_router(user.router)
+api_router.include_router(admin.router)
+api_router.include_router(geo.router)
+api_router.include_router(coupons.router)
+api_router.include_router(campaigns.router)
+api_router.include_router(reservations.router)
+api_router.include_router(notifications.router)
 
 # Include the main router in the app
 app.include_router(api_router)
