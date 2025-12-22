@@ -332,63 +332,116 @@ const DineInRestaurantPage = () => {
             )}
 
             {activeTab === 'about' && (
-              <div className="bg-white rounded-2xl p-8 space-y-8">
-                {/* Description */}
-                {restaurant.description && (
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3">Hakkımızda</h3>
-                    <p className="text-gray-600 leading-relaxed">{restaurant.description}</p>
-                  </div>
-                )}
-
-                {/* Features */}
+              <div className="bg-white rounded-2xl p-6 space-y-6">
+                {/* Contact Info */}
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Özellikler</h3>
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    {[
-                      { icon: Check, text: 'Masa Rezervasyonu' },
-                      { icon: Check, text: 'Açık Hava Oturma' },
-                      { icon: Check, text: 'Otopark Mevcut' },
-                      { icon: Check, text: 'WiFi' },
-                      ...(restaurant.tags || []).map(tag => ({ icon: Check, text: tag }))
-                    ].map((feature, idx) => {
-                      const Icon = feature.icon;
-                      return (
-                        <div key={idx} className="flex items-center gap-3 text-gray-700">
-                          <Icon className="w-5 h-5 text-green-600" />
-                          <span>{feature.text}</span>
-                        </div>
-                      );
-                    })}
+                  <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <Phone className="w-5 h-5 text-blue-600" /> İletişim Bilgileri
+                  </h3>
+                  {restaurant.phone && (
+                    <a href={`tel:${restaurant.phone}`} className="text-blue-600 hover:underline block mb-2">
+                      {restaurant.phone}
+                    </a>
+                  )}
+                  <p className="text-gray-600">{restaurant.location?.address || 'Adres bilgisi yok'}</p>
+                </div>
+
+                {/* Opening Hours */}
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-blue-600" /> Çalışma Saatleri
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    {['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'].map((day) => (
+                      <div key={day} className="flex justify-between">
+                        <span className="text-gray-600">{day}</span>
+                        <span className="font-medium text-gray-900">10:00 - 23:00</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                {/* Location */}
+                {/* Amenities */}
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <MapPin className="w-6 h-6 text-red-600" /> Konum
-                  </h3>
-                  <p className="text-gray-600 mb-4">{restaurant.location?.address || 'Adres bilgisi yok'}</p>
-                  
-                  {restaurant.location?.coordinates && (
+                  <h3 className="font-semibold text-gray-900 mb-3">Olanaklar</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>WiFi</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Vale Park</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Çocuk Sandalyesi</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Bar</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment Methods */}
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Ödeme Yöntemleri</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {['Kredi Kartı', 'Banka Kartı', 'Nakit', 'Temassız Ödeme'].map((method) => (
+                      <span key={method} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">
+                        {method}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Accessibility */}
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Erişilebilirlik</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Tekerlekli Sandalye Erişimi</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Engelli Tuvaleti</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Engelli Giriş</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Parking */}
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Otopark</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Ücretsli Sokak Parkı</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Vale Hizmeti</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Location Map */}
+                {restaurant.location?.coordinates && (
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <MapPin className="w-5 h-5 text-blue-600" /> Konum
+                    </h3>
                     <RestaurantMap 
                       restaurants={[restaurant]}
                       center={[restaurant.location.coordinates.lat, restaurant.location.coordinates.lng]}
                       zoom={15}
                       height="300px"
                     />
-                  )}
-                </div>
-
-                {/* Contact */}
-                {restaurant.phone && (
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <Phone className="w-6 h-6 text-red-600" /> İletişim
-                    </h3>
-                    <a href={`tel:${restaurant.phone}`} className="text-red-600 hover:underline text-lg">
-                      {restaurant.phone}
-                    </a>
                   </div>
                 )}
               </div>
