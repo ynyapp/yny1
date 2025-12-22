@@ -125,27 +125,27 @@ const RestaurantsPage = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      {/* Search Bar */}
+      {/* Search Bar - Sticky */}
       <div className="bg-white border-b sticky top-16 z-40">
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row gap-3">
-            <div className="flex-1 flex items-center gap-2 border rounded-lg px-4 py-2 bg-gray-50">
+            <div className="flex-1 flex items-center gap-2 border rounded-lg px-4 py-3 bg-gray-50">
               <MapPin className="w-5 h-5 text-red-600" />
               <select
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
-                className="flex-1 bg-transparent border-none outline-none text-gray-700"
+                className="flex-1 bg-transparent border-none outline-none text-gray-700 font-medium"
               >
                 {turkishCities.map(city => (
                   <option key={city} value={city}>{city}</option>
                 ))}
               </select>
             </div>
-            <div className="flex-1 flex items-center gap-2 border rounded-lg px-4 py-2">
+            <div className="flex-1 flex items-center gap-2 border rounded-lg px-4 py-3">
               <Search className="w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Restoran veya yemek ara..."
+                placeholder="Restoran, mutfak veya yemek ara..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="flex-1 border-none outline-none text-gray-700"
@@ -160,15 +160,15 @@ const RestaurantsPage = () => {
             <TabsList className="w-full justify-start border-b-0 bg-transparent h-auto p-0">
               <TabsTrigger
                 value="delivery"
-                className="data-[state=active]:border-b-2 data-[state=active]:border-red-600 rounded-none pb-3 px-6"
+                className="data-[state=active]:border-b-2 data-[state=active]:border-red-600 data-[state=active]:text-red-600 rounded-none pb-3 px-6 text-gray-600"
               >
-                🛵 Delivery
+                Paket Servis
               </TabsTrigger>
               <TabsTrigger
                 value="dineout"
-                className="data-[state=active]:border-b-2 data-[state=active]:border-red-600 rounded-none pb-3 px-6"
+                className="data-[state=active]:border-b-2 data-[state=active]:border-red-600 data-[state=active]:text-red-600 rounded-none pb-3 px-6 text-gray-600"
               >
-                🍽️ Dining
+                Restoranda Yemek
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -176,22 +176,107 @@ const RestaurantsPage = () => {
       </div>
 
       <div className="container mx-auto px-4 py-6">
-        {/* Filter Bar */}
-        <div className="flex flex-wrap items-center gap-3 mb-6">
+        {/* Collections */}
+        <Collections />
+
+        {/* Quick Filters Bar */}
+        <div className="flex items-center gap-3 mb-6 overflow-x-auto pb-2 scrollbar-hide">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setShowFilters(!showFilters)}
-            className="gap-2"
+            onClick={() => setShowFilterModal(true)}
+            className="gap-2 whitespace-nowrap border-2"
           >
             <Filter className="w-4 h-4" />
             Filtreler
           </Button>
 
+          <Button
+            variant={filters.minRating >= 4.5 ? "default" : "outline"}
+            size="sm"
+            onClick={() => handleFilterChange('minRating', filters.minRating === 4.5 ? 0 : 4.5)}
+            className={`whitespace-nowrap ${filters.minRating >= 4.5 ? 'bg-red-600 text-white' : ''}`}
+          >
+            ⭐ Puan 4.5+
+          </Button>
+
+          <Button
+            variant={filters.pureVeg ? "default" : "outline"}
+            size="sm"
+            onClick={() => handleFilterChange('pureVeg', !filters.pureVeg)}
+            className={`whitespace-nowrap ${filters.pureVeg ? 'bg-green-600 text-white hover:bg-green-700' : ''}`}
+          >
+            🥬 Vejeteryan
+          </Button>
+
+          <Button
+            variant={filters.petFriendly ? "default" : "outline"}
+            size="sm"
+            onClick={() => handleFilterChange('petFriendly', !filters.petFriendly)}
+            className={`whitespace-nowrap ${filters.petFriendly ? 'bg-blue-600 text-white' : ''}`}
+          >
+            🐕 Evcil Hayvan Dostu
+          </Button>
+
+          <Button
+            variant={filters.outdoorSeating ? "default" : "outline"}
+            size="sm"
+            onClick={() => handleFilterChange('outdoorSeating', !filters.outdoorSeating)}
+            className={`whitespace-nowrap ${filters.outdoorSeating ? 'bg-teal-600 text-white' : ''}`}
+          >
+            🌳 Açık Hava
+          </Button>
+
+          <Button
+            variant={filters.servesAlcohol ? "default" : "outline"}
+            size="sm"
+            onClick={() => handleFilterChange('servesAlcohol', !filters.servesAlcohol)}
+            className={`whitespace-nowrap ${filters.servesAlcohol ? 'bg-purple-600 text-white' : ''}`}
+          >
+            🍷 Alkol Servisi
+          </Button>
+
+          <Button
+            variant={filters.openNow ? "default" : "outline"}
+            size="sm"
+            onClick={() => handleFilterChange('openNow', !filters.openNow)}
+            className={`whitespace-nowrap ${filters.openNow ? 'bg-orange-600 text-white' : ''}`}
+          >
+            🕐 Şimdi Açık
+          </Button>
+
+          {hasActiveFilters() && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearAllFilters}
+              className="text-red-600 hover:text-red-700 whitespace-nowrap"
+            >
+              <X className="w-4 h-4 mr-1" />
+              Temizle
+            </Button>
+          )}
+        </div>
+
+        {/* Restaurant Count & Sort */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            {loading ? (
+              <p className="text-gray-600">Yükleniyor...</p>
+            ) : (
+              <>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  {restaurants.length} Restoran
+                </h2>
+                <p className="text-gray-600">{selectedCity} • {serviceType === 'delivery' ? 'Paket Servis' : 'Restoranda Yemek'}</p>
+              </>
+            )}
+          </div>
+
           <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="px-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-red-600"
+            value={filters.sortBy}
+            onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+            className="px-4 py-2 border-2 border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600"
           >
             <option value="popularity">Popülerlik</option>
             <option value="rating">En Yüksek Puan</option>
@@ -199,36 +284,6 @@ const RestaurantsPage = () => {
             <option value="cost_low">Düşük Fiyat</option>
             <option value="cost_high">Yüksek Fiyat</option>
           </select>
-
-          <Button
-            variant={openNow ? "default" : "outline"}
-            size="sm"
-            onClick={() => setOpenNow(!openNow)}
-            className={openNow ? "bg-red-600 text-white" : ""}
-          >
-            Şimdi Açık
-          </Button>
-
-          <Button
-            variant={pureVeg ? "default" : "outline"}
-            size="sm"
-            onClick={() => setPureVeg(!pureVeg)}
-            className={pureVeg ? "bg-green-600 text-white" : ""}
-          >
-            🥬 Vejeteryan
-          </Button>
-
-          {(selectedCuisines.length > 0 || minRating > 0 || pureVeg || openNow) && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearFilters}
-              className="text-red-600"
-            >
-              <X className="w-4 h-4 mr-1" />
-              Filtreleri Temizle
-            </Button>
-          )}
         </div>
         <div className="flex flex-col md:flex-row gap-8">
           {/* Filters Sidebar */}
