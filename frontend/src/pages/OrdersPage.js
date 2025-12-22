@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Package, Clock, Check, X, MapPin, Star } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { mockOrders } from '../mockData';
+import { ordersAPI } from '../api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Button } from '../components/ui/button';
@@ -10,9 +10,30 @@ import { Button } from '../components/ui/button';
 const OrdersPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadOrders();
+    } else {
+      navigate('/login');
+    }
+  }, [isAuthenticated]);
+
+  const loadOrders = async () => {
+    try {
+      setLoading(true);
+      const data = await ordersAPI.getAll();
+      setOrders(data);
+    } catch (error) {
+      console.error('Failed to load orders:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (!isAuthenticated) {
-    navigate('/login');
     return null;
   }
 
