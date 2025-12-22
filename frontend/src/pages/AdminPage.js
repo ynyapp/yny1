@@ -334,21 +334,21 @@ export default function AdminPage() {
       case 'dashboard':
         return <DashboardTab />;
       case 'restaurants':
-        return <div className="bg-white rounded-xl shadow-sm p-6"><p className="text-gray-500">Restoran yönetimi yakında...</p></div>;
+        return <RestaurantsTab />;
       case 'orders':
-        return <div className="bg-white rounded-xl shadow-sm p-6"><p className="text-gray-500">Sipariş yönetimi yakında...</p></div>;
+        return <OrdersTab />;
       case 'users':
-        return <div className="bg-white rounded-xl shadow-sm p-6"><p className="text-gray-500">Kullanıcı yönetimi yakında...</p></div>;
+        return <UsersTab />;
       case 'coupons':
-        return <div className="bg-white rounded-xl shadow-sm p-6"><p className="text-gray-500">Kupon yönetimi yakında...</p></div>;
+        return <CouponsTab />;
       case 'campaigns':
-        return <div className="bg-white rounded-xl shadow-sm p-6"><p className="text-gray-500">Kampanya yönetimi yakında...</p></div>;
+        return <CampaignsTab />;
       case 'reservations':
-        return <div className="bg-white rounded-xl shadow-sm p-6"><p className="text-gray-500">Rezervasyon yönetimi yakında...</p></div>;
+        return <ReservationsTab />;
       case 'api-keys':
-        return <div className="bg-white rounded-xl shadow-sm p-6"><p className="text-gray-500">API anahtar yönetimi yakında...</p></div>;
+        return <APIKeysTab />;
       case 'settings':
-        return <div className="bg-white rounded-xl shadow-sm p-6"><p className="text-gray-500">Ayarlar yakında...</p></div>;
+        return <SettingsTab />;
       default:
         return <DashboardTab />;
     }
