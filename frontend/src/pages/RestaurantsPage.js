@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Filter, Star, Clock, MapPin, Search, X } from 'lucide-react';
+import { Filter, Star, Clock, MapPin, Search, X, ChevronDown, SlidersHorizontal } from 'lucide-react';
 import { restaurantsAPI } from '../api';
 import { cuisineTypes, turkishCities } from '../mockData';
 import Navbar from '../components/Navbar';
@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 import { Button } from '../components/ui/button';
 import { Checkbox } from '../components/ui/checkbox';
 import { Slider } from '../components/ui/slider';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 
 const RestaurantsPage = () => {
   const navigate = useNavigate();
@@ -20,10 +21,15 @@ const RestaurantsPage = () => {
   const [priceRange, setPriceRange] = useState([0, 3]);
   const [minRating, setMinRating] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
+  const [serviceType, setServiceType] = useState('delivery'); // delivery or dineout
+  const [sortBy, setSortBy] = useState('popularity'); // popularity, rating, cost_low, cost_high, delivery_time
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
+  const [pureVeg, setPureVeg] = useState(false);
+  const [openNow, setOpenNow] = useState(false);
 
   useEffect(() => {
     fetchRestaurants();
-  }, [searchQuery, selectedCity, selectedCuisines, minRating]);
+  }, [searchQuery, selectedCity, selectedCuisines, minRating, serviceType, sortBy, pureVeg, openNow]);
 
   const fetchRestaurants = async () => {
     try {
@@ -34,18 +40,52 @@ const RestaurantsPage = () => {
         min_rating: minRating || undefined,
       };
       
-      // Add cuisine filter
       if (selectedCuisines.length > 0) {
-        params.cuisine = selectedCuisines[0]; // API supports single cuisine for now
+        params.cuisine = selectedCuisines[0];
       }
 
       const data = await restaurantsAPI.getAll(params);
-      setRestaurants(data.items || data);
+      let filtered = data.items || data;
+
+      // Filter by pure veg
+      if (pureVeg) {
+        filtered = filtered.filter(r => r.tags?.includes('Vejetaryen'));
+      }
+
+      // Filter by open now
+      if (openNow) {
+        filtered = filtered.filter(r => r.isOpen);
+      }
+
+      // Sort restaurants
+      filtered = sortRestaurants(filtered, sortBy);
+
+      setRestaurants(filtered);
     } catch (error) {
       console.error('Failed to fetch restaurants:', error);
       setRestaurants([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const sortRestaurants = (restaurants, sortType) => {
+    const sorted = [...restaurants];
+    switch (sortType) {
+      case 'rating':
+        return sorted.sort((a, b) => b.rating - a.rating);
+      case 'cost_low':
+        return sorted.sort((a, b) => a.minOrder - b.minOrder);
+      case 'cost_high':
+        return sorted.sort((a, b) => b.minOrder - a.minOrder);
+      case 'delivery_time':
+        return sorted.sort((a, b) => {
+          const aTime = parseInt(a.deliveryTime.split('-')[0]);
+          const bTime = parseInt(b.deliveryTime.split('-')[0]);
+          return aTime - bTime;
+        });
+      default: // popularity
+        return sorted.sort((a, b) => b.reviewCount - a.reviewCount);
     }
   };
 
@@ -61,6 +101,8 @@ const RestaurantsPage = () => {
     setSelectedCuisines([]);
     setPriceRange([0, 3]);
     setMinRating(0);
+    setPureVeg(false);
+    setOpenNow(false);
   };
 
   return (
