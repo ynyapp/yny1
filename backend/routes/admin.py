@@ -18,7 +18,16 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 # Admin check middleware
 async def verify_admin(current_user: dict = Depends(get_current_user)):
-    user = await db.users.find_one({"_id": ObjectId(current_user["user_id"])})
+    user_id = current_user["user_id"]
+    
+    # Try both string and ObjectId queries
+    user = await db.users.find_one({"_id": user_id})
+    if not user:
+        try:
+            user = await db.users.find_one({"_id": ObjectId(user_id)})
+        except:
+            pass
+    
     if not user or not user.get("is_admin", False):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
