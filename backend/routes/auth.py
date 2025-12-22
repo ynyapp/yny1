@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from datetime import timedelta
+from bson import ObjectId
 from models.user import UserCreate, UserLogin, UserResponse, Token, User
 from utils.security import (
     get_password_hash, 
