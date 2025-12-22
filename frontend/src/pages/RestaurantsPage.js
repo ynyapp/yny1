@@ -523,7 +523,17 @@ const RestaurantCard = ({ restaurant, onClick, compact = false }) => {
         />
         
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex gap-2">
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          {restaurant.isPromoted && restaurant.promotionText && (
+            <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+              {restaurant.promotionText}
+            </span>
+          )}
+          {restaurant.isGoldPartner && (
+            <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
+              👑 Gold
+            </span>
+          )}
           {restaurant.hasDelivery !== false && (
             <span className="bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full flex items-center gap-1">
               <Bike className="w-3 h-3" /> Teslimat
@@ -568,6 +578,18 @@ const RestaurantCard = ({ restaurant, onClick, compact = false }) => {
             <span className="text-gray-400 text-sm">{restaurant.priceRange || '₺₺'}</span>
           </div>
         </div>
+        
+        {/* Offers */}
+        {restaurant.offers && restaurant.offers.length > 0 && (
+          <div className="mt-3 space-y-1">
+            {restaurant.offers.map((offer, idx) => (
+              <div key={idx} className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 flex items-center gap-2">
+                <span className="text-blue-600 font-bold text-lg">%</span>
+                <span className="text-blue-700 font-semibold text-sm">{offer}</span>
+              </div>
+            ))}
+          </div>
+        )}
         
         {restaurant.canDeliver === false && restaurant.distance && (
           <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
