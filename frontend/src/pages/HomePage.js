@@ -92,6 +92,11 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO 
+        title="Yemek Nerede Yenir - En İyi Restoranlar ve Online Yemek Siparişi"
+        description="Türkiye'nin en iyi restoranlarından online yemek siparişi verin. Yakınızdaki restoranları keşfedin, özel indirimleri kaçırmayın. Hızlı teslimat, güvenli ödeme."
+        keywords="yemek siparişi, online yemek, restoran, teslimat, yemek sipariş, istanbul restoran, pizza sipariş, burger sipariş"
+      />
       <Navbar />
       
       {/* Hero Section - Modern Design */}
