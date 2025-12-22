@@ -11,6 +11,16 @@ import { Button } from '../components/ui/button';
 import { toast } from '../hooks/use-toast';
 import { Toaster } from '../components/ui/toaster';
 
+// Import admin tabs
+import RestaurantsTab from './admin/RestaurantsTab';
+import OrdersTab from './admin/OrdersTab';
+import UsersTab from './admin/UsersTab';
+import CouponsTab from './admin/CouponsTab';
+import CampaignsTab from './admin/CampaignsTab';
+import APIKeysTab from './admin/APIKeysTab';
+import SettingsTab from './admin/SettingsTab';
+import ReservationsTab from './admin/ReservationsTab';
+
 const AdminLayout = ({ children, activeTab, setActiveTab }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
