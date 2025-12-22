@@ -559,13 +559,21 @@ const RestaurantCard = ({ restaurant, onClick, compact = false }) => {
             <Clock className="w-4 h-4" />
             <span>{restaurant.deliveryTime || '30-40 dk'}</span>
           </div>
-          <div className="flex items-center gap-1">
-            <span className="text-gray-400 text-sm">{restaurant.priceRange || '₺₺'}</span>
-            {restaurant.minOrder && (
-              <span className="text-gray-400 text-sm ml-2">Min: {restaurant.minOrder}₺</span>
+          <div className="flex items-center gap-2">
+            {restaurant.distance && (
+              <span className="text-blue-600 text-sm font-medium">
+                📍 {restaurant.distance} km
+              </span>
             )}
+            <span className="text-gray-400 text-sm">{restaurant.priceRange || '₺₺'}</span>
           </div>
         </div>
+        
+        {restaurant.canDeliver === false && restaurant.distance && (
+          <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p className="text-xs text-yellow-700">⚠️ Teslimat alanı dışında</p>
+          </div>
+        )}
       </div>
     </div>
   );
