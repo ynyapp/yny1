@@ -491,6 +491,11 @@ const RestaurantCard = ({ restaurant, onClick, compact = false }) => {
               <Clock className="w-4 h-4" />
               {restaurant.deliveryTime || '30-40 dk'}
             </span>
+            {restaurant.distance && (
+              <span className="flex items-center gap-1 text-blue-600 font-medium">
+                📍 {restaurant.distance} km
+              </span>
+            )}
           </div>
           <div className="flex gap-2 mt-2">
             {restaurant.hasDelivery !== false && (
