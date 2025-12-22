@@ -39,6 +39,11 @@ export const menuAPI = {
     const response = await axiosInstance.get(`/menu/${restaurantId}`);
     return response.data;
   },
+
+  getByRestaurant: async (restaurantId) => {
+    const response = await axiosInstance.get(`/menu/${restaurantId}`);
+    return response.data;
+  },
 };
 
 export const ordersAPI = {
