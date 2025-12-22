@@ -232,6 +232,24 @@ export const notificationsAPI = {
   },
 };
 
+// Collections API
+export const collectionsAPI = {
+  getAll: async (category, limit = 20) => {
+    const response = await axiosInstance.get('/collections', { params: { category, limit } });
+    return response.data;
+  },
+
+  getById: async (collectionId) => {
+    const response = await axiosInstance.get(`/collections/${collectionId}`);
+    return response.data;
+  },
+
+  getRestaurants: async (collectionId) => {
+    const response = await axiosInstance.get(`/collections/${collectionId}/restaurants`);
+    return response.data;
+  },
+};
+
 // Admin API
 export const adminAPI = {
   // Dashboard
