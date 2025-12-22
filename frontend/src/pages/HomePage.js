@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Search, ChevronRight, Star, Clock, Bike, Utensils, Coffee, Pizza, Flame, Fish, Salad, IceCream, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { restaurantsAPI, campaignsAPI, geoAPI } from '../api';
+import { restaurantsAPI, campaignsAPI, geoAPI, collectionsAPI } from '../api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import RestaurantMap from '../components/RestaurantMap';
@@ -14,6 +14,7 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [popularRestaurants, setPopularRestaurants] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
+  const [collections, setCollections] = useState([]);
   const [cities, setCities] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
@@ -23,6 +24,7 @@ const HomePage = () => {
     loadPopularRestaurants();
     loadCampaigns();
     loadCities();
+    loadCollections();
   }, []);
 
   const loadPopularRestaurants = async () => {
@@ -40,6 +42,15 @@ const HomePage = () => {
       setCampaigns(data || []);
     } catch (error) {
       console.error('Failed to load campaigns:', error);
+    }
+  };
+
+  const loadCollections = async () => {
+    try {
+      const data = await collectionsAPI.getAll(null, 8);
+      setCollections(data || []);
+    } catch (error) {
+      console.error('Failed to load collections:', error);
     }
   };
 
@@ -224,6 +235,47 @@ const HomePage = () => {
           })}
         </div>
       </section>
+
+      {/* Collections Section */}
+      {collections.length > 0 && (
+        <section className="container mx-auto px-4 py-12 bg-gray-50">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Koleksiyonlar</h2>
+              <p className="text-gray-500 mt-1">Özel seçilmiş restoranlar</p>
+            </div>
+            <button 
+              className="text-red-600 hover:text-red-700 font-medium flex items-center gap-1"
+            >
+              Tümünü Gör <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+          
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+            {collections.map((collection) => (
+              <div 
+                key={collection.id}
+                onClick={() => navigate(`/restaurants?collection=${collection.id}`)}
+                className="min-w-[280px] cursor-pointer group"
+              >
+                <div className="relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition">
+                  <img 
+                    src={collection.image} 
+                    alt={collection.title}
+                    className="w-full h-40 object-cover group-hover:scale-105 transition duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
+                    <div className="text-white">
+                      <h3 className="font-bold text-lg">{collection.title}</h3>
+                      <p className="text-sm text-white/80">{collection.restaurantCount} restoran</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Campaigns Banner */}
       {campaigns.length > 0 && (
