@@ -26,7 +26,7 @@ const RestaurantDetailPage = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('menu');
+  const [activeTab, setActiveTab] = useState('overview');
   const [selectedCategory, setSelectedCategory] = useState('Tümü');
   const [liked, setLiked] = useState(false);
   
