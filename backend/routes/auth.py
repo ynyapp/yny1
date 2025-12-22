@@ -15,7 +15,7 @@ import os
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
 # Get database
-from server import db
+from database import db
 
 @router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED)
 async def register(user_data: UserCreate):
