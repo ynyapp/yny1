@@ -29,10 +29,16 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">Y</span>
-            </div>
-            <span className="text-xl font-bold text-gray-900 hidden sm:block">Yemek Nerede Yenir</span>
+            <img 
+              src="https://customer-assets.emergentagent.com/job_food-order-31/artifacts/0me4i8sz_images%20%281%29.jpeg" 
+              alt="Yemek Nerede Yenir Icon" 
+              className="w-10 h-10 object-contain sm:hidden"
+            />
+            <img 
+              src="https://customer-assets.emergentagent.com/job_food-order-31/artifacts/s5lmzema_channels4_banner.jpg" 
+              alt="Yemek Nerede Yenir" 
+              className="h-8 object-contain hidden sm:block"
+            />
           </Link>
 
           {/* Desktop Menu */}
