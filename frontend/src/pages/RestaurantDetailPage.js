@@ -7,7 +7,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Button } from '../components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { toast } from '../components/ui/use-toast';
+import { toast } from '../hooks/use-toast';
 import { Toaster } from '../components/ui/toaster';
 
 const RestaurantDetailPage = () => {
