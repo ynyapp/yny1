@@ -21,10 +21,13 @@ const RestaurantsPage = () => {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [selectedCity, setSelectedCity] = useState(searchParams.get('city') || 'İstanbul');
   const [selectedCuisine, setSelectedCuisine] = useState(searchParams.get('cuisine') || '');
+  const [selectedFeature, setSelectedFeature] = useState(searchParams.get('feature') || '');
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [viewMode, setViewMode] = useState('grid'); // grid or map
   const [serviceType, setServiceType] = useState('all'); // all, delivery, dineIn
   const [cities, setCities] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
+  const [nearbyOnly, setNearbyOnly] = useState(false);
   
   const [filters, setFilters] = useState({
     selectedCuisines: selectedCuisine ? [selectedCuisine] : [],
@@ -47,8 +50,33 @@ const RestaurantsPage = () => {
 
   useEffect(() => {
     loadCities();
+    getUserLocation();
     fetchRestaurants();
-  }, [searchQuery, selectedCity, filters, serviceType]);
+  }, [searchQuery, selectedCity, filters, serviceType, selectedFeature, nearbyOnly]);
+
+  useEffect(() => {
+    // Update feature from URL params
+    const feature = searchParams.get('feature');
+    if (feature) {
+      setSelectedFeature(feature);
+    }
+  }, [searchParams]);
+
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+        },
+        (error) => {
+          console.log('Location access denied or not available');
+        }
+      );
+    }
+  };
 
   const loadCities = async () => {
     try {
@@ -66,7 +94,19 @@ const RestaurantsPage = () => {
         city: selectedCity,
         search: searchQuery,
         min_rating: filters.minRating || undefined,
+        feature: selectedFeature || undefined,
       };
+      
+      // Add user location for nearby search
+      if (userLocation && nearbyOnly) {
+        params.lat = userLocation.lat;
+        params.lng = userLocation.lng;
+        params.max_distance = 10; // 10 km radius
+      } else if (userLocation) {
+        // Always send location to calculate distance
+        params.lat = userLocation.lat;
+        params.lng = userLocation.lng;
+      }
       
       if (filters.selectedCuisines.length > 0) {
         params.cuisine = filters.selectedCuisines[0];
