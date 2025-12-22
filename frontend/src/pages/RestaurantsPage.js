@@ -285,191 +285,154 @@ const RestaurantsPage = () => {
             <option value="cost_high">Yüksek Fiyat</option>
           </select>
         </div>
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Filters Sidebar */}
-          <div className={`md:w-64 ${showFilters ? 'block' : 'hidden md:block'}`}>
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-32">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-gray-900">Filtreler</h3>
-                {(selectedCuisines.length > 0 || minRating > 0) && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearFilters}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    Temizle
-                  </Button>
-                )}
-              </div>
-
-              {/* Cuisine Filter */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Mutfak</h4>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
-                  {cuisineTypes.map(cuisine => (
-                    <div key={cuisine} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={cuisine}
-                        checked={selectedCuisines.includes(cuisine)}
-                        onCheckedChange={() => toggleCuisine(cuisine)}
-                      />
-                      <label
-                        htmlFor={cuisine}
-                        className="text-sm text-gray-700 cursor-pointer"
-                      >
-                        {cuisine}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Rating Filter */}
-              <div className="mb-6">
-                <h4 className="font-semibold text-gray-900 mb-3">Minimum Puan</h4>
-                <div className="space-y-2">
-                  {[4.5, 4.0, 3.5, 3.0].map(rating => (
-                    <button
-                      key={rating}
-                      onClick={() => setMinRating(rating)}
-                      className={`flex items-center space-x-2 w-full py-2 px-3 rounded-lg transition-colors ${
-                        minRating === rating
-                          ? 'bg-red-50 text-red-600'
-                          : 'hover:bg-gray-50 text-gray-700'
-                      }`}
-                    >
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm">{rating} ve üstü</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
+        {/* Restaurant List */}
+        {loading ? (
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-600 mx-auto mb-4"></div>
+            <p className="text-gray-600 text-lg">Restoranlar yükleniyor...</p>
           </div>
+        ) : restaurants.length === 0 ? (
+          <div className="bg-white rounded-xl p-12 text-center">
+            <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+              <Search className="w-10 h-10 text-gray-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Restoran Bulunamadı</h3>
+            <p className="text-gray-600 mb-6">Arama kriterlerinize uygun restoran bulunamadı.</p>
+            <Button onClick={clearAllFilters} className="bg-red-600 hover:bg-red-700 text-white">
+              Filtreleri Temizle
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-5">
+            {restaurants.map((restaurant) => (
+              <div
+                key={restaurant.id}
+                onClick={() => navigate(`/restaurant/${restaurant.slug || restaurant.id}`)}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer border border-gray-100 group"
+              >
+                <div className="flex flex-col sm:flex-row">
+                  {/* Restaurant Image */}
+                  <div className="relative w-full sm:w-72 h-56 sm:h-auto flex-shrink-0">
+                    <img
+                      src={restaurant.image}
+                      alt={restaurant.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    
+                    {/* Discount Badge */}
+                    {restaurant.discount && (
+                      <div className="absolute top-3 left-3 bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm font-bold shadow-lg flex items-center gap-1">
+                        <span>💰</span>
+                        {restaurant.discount}
+                      </div>
+                    )}
 
-          {/* Restaurant List */}
-          <div className="flex-1">
-            {loading ? (
-              <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
-                <p className="text-gray-600 mt-4">Restoranlar yükleniyor...</p>
-              </div>
-            ) : (
-              <>
-                <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    {restaurants.length} Restoran Bulundu
-                  </h2>
-                  <p className="text-gray-600">{selectedCity} bölgesinde • {serviceType === 'delivery' ? 'Paket Servis' : 'Restoranda Yemek'}</p>
-                </div>
-
-                {restaurants.length === 0 ? (
-                  <div className="bg-white rounded-xl p-12 text-center">
-                    <p className="text-gray-500 text-lg">Arama kriterlerinize uygun restoran bulunamadı.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {restaurants.map((restaurant) => (
-                      <div
-                        key={restaurant.id}
-                        onClick={() => navigate(`/restaurant/${restaurant.slug || restaurant.id}`)}
-                        className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer border border-gray-100"
-                      >
-                        <div className="flex flex-col sm:flex-row">
-                          <div className="relative w-full sm:w-64 h-48">
-                            <img
-                              src={restaurant.image}
-                              alt={restaurant.name}
-                              className="w-full h-full object-cover"
-                            />
-                            {restaurant.discount && (
-                              <div className="absolute top-3 left-3 bg-blue-600 text-white px-3 py-1 rounded text-sm font-semibold">
-                                💰 {restaurant.discount}
-                              </div>
-                            )}
-                            {!restaurant.isOpen && (
-                              <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
-                                <span className="text-white font-semibold text-lg">Şu Anda Kapalı</span>
-                              </div>
-                            )}
-                            {restaurant.isOpen && serviceType === 'delivery' && (
-                              <div className="absolute bottom-3 left-3 bg-white px-2 py-1 rounded text-xs font-semibold text-gray-700 flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                {restaurant.deliveryTime}
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex-1 p-5">
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="flex-1">
-                                <h3 className="text-xl font-bold text-gray-900 mb-1">{restaurant.name}</h3>
-                                <p className="text-sm text-gray-600 mb-2">{restaurant.cuisine}</p>
-                                <div className="flex flex-wrap gap-2 mb-3">
-                                  {restaurant.tags.slice(0, 3).map(tag => (
-                                    <span
-                                      key={tag}
-                                      className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
-                                    >
-                                      {tag}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-1 bg-green-600 text-white px-2 py-1 rounded">
-                                <span className="font-bold">{restaurant.rating}</span>
-                                <Star className="w-3 h-3 fill-white" />
-                              </div>
-                            </div>
-                            
-                            <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                              <div className="flex items-center gap-1">
-                                <MapPin className="w-4 h-4" />
-                                <span>{restaurant.location?.city}</span>
-                              </div>
-                              <span>•</span>
-                              <span className="font-semibold text-gray-700">{restaurant.priceRange}</span>
-                              {serviceType === 'delivery' && (
-                                <>
-                                  <span>•</span>
-                                  <span>Min. {restaurant.minOrder}₺</span>
-                                </>
-                              )}
-                            </div>
-                            
-                            {serviceType === 'delivery' && (
-                              <div className="flex items-center gap-2 text-xs text-gray-500 pt-3 border-t">
-                                <span>🚚 Teslimat Ücreti: {restaurant.deliveryFee}₺</span>
-                                <span>•</span>
-                                <span>{restaurant.reviewCount} değerlendirme</span>
-                              </div>
-                            )}
-                            
-                            {serviceType === 'dineout' && restaurant.isOpen && (
-                              <div className="mt-3">
-                                <Button
-                                  size="sm"
-                                  className="bg-red-600 hover:bg-red-700 text-white"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    navigate(`/restaurant/${restaurant.slug || restaurant.id}`);
-                                  }}
-                                >
-                                  Rezervasyon Yap
-                                </Button>
-                              </div>
-                            )}
-                          </div>
+                    {/* Closed Overlay */}
+                    {!restaurant.isOpen && (
+                      <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                        <div className="text-center text-white">
+                          <p className="font-bold text-lg mb-1">Şu Anda Kapalı</p>
+                          <p className="text-sm opacity-90">Yakında Açılacak</p>
                         </div>
                       </div>
-                    ))}
+                    )}
+
+                    {/* Delivery Time Badge */}
+                    {restaurant.isOpen && serviceType === 'delivery' && (
+                      <div className="absolute bottom-3 left-3 bg-white px-3 py-1.5 rounded-lg text-sm font-semibold text-gray-800 flex items-center gap-1.5 shadow-md">
+                        <Clock className="w-4 h-4 text-red-600" />
+                        {restaurant.deliveryTime}
+                      </div>
+                    )}
+
+                    {/* Rating Badge */}
+                    <div className="absolute top-3 right-3 bg-green-600 text-white px-2.5 py-1.5 rounded-lg flex items-center gap-1 font-bold text-sm shadow-lg">
+                      <span>{restaurant.rating}</span>
+                      <Star className="w-3.5 h-3.5 fill-white" />
+                    </div>
                   </div>
-                )}
-              </>
-            )}
+
+                  {/* Restaurant Info */}
+                  <div className="flex-1 p-5">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-red-600 transition-colors">
+                          {restaurant.name}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-2">{restaurant.cuisine}</p>
+                      </div>
+                    </div>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {restaurant.tags.slice(0, 4).map(tag => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-medium"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Location & Price */}
+                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                      <div className="flex items-center gap-1.5">
+                        <MapPin className="w-4 h-4 text-gray-400" />
+                        <span>{restaurant.location?.city}</span>
+                      </div>
+                      <span className="text-gray-300">•</span>
+                      <span className="font-semibold text-gray-800">{restaurant.priceRange}</span>
+                      {serviceType === 'delivery' && (
+                        <>
+                          <span className="text-gray-300">•</span>
+                          <span>Min. {restaurant.minOrder}₺</span>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Bottom Info */}
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        {serviceType === 'delivery' && (
+                          <>
+                            <span>🚚 Teslimat: {restaurant.deliveryFee}₺</span>
+                            <span className="text-gray-300">•</span>
+                          </>
+                        )}
+                        <span>{restaurant.reviewCount} değerlendirme</span>
+                      </div>
+
+                      {serviceType === 'dineout' && restaurant.isOpen && (
+                        <Button
+                          size="sm"
+                          className="bg-red-600 hover:bg-red-700 text-white"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/restaurant/${restaurant.slug || restaurant.id}`);
+                          }}
+                        >
+                          Rezervasyon Yap
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
+        )}
       </div>
+
+      {/* Filter Modal */}
+      <FilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        onApply={fetchRestaurants}
+        onClear={clearAllFilters}
+      />
 
       <Footer />
     </div>
