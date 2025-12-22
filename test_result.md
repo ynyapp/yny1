@@ -274,8 +274,7 @@ metadata:
 test_plan:
   current_focus:
     - "Cart and Checkout Flow"
-  stuck_tasks:
-    - "Cart and Checkout Flow"
+  stuck_tasks: []
   test_all: false
   test_priority: "stuck_first"
 
