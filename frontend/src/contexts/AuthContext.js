@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { mockUser } from '../mockData';
+import { authAPI } from '../api';
 
 const AuthContext = createContext();
 
@@ -14,53 +14,84 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-      setIsAuthenticated(true);
+    // Check if user is already logged in
+    const token = localStorage.getItem('token');
+    if (token) {
+      loadUser();
+    } else {
+      setLoading(false);
     }
   }, []);
 
-  const login = (email, password) => {
-    // Mock login - accept any credentials
-    const userData = { ...mockUser, email };
-    setUser(userData);
-    setIsAuthenticated(true);
-    localStorage.setItem('user', JSON.stringify(userData));
-    return true;
+  const loadUser = async () => {
+    try {
+      const userData = await authAPI.getCurrentUser();
+      setUser(userData);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error('Failed to load user:', error);
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const signup = (name, email, password, phone) => {
-    // Mock signup
-    const userData = { ...mockUser, name, email, phone };
-    setUser(userData);
-    setIsAuthenticated(true);
-    localStorage.setItem('user', JSON.stringify(userData));
-    return true;
+  const login = async (email, password) => {
+    try {
+      const response = await authAPI.login({ email, password });
+      localStorage.setItem('token', response.access_token);
+      await loadUser();
+      return true;
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
+  };
+
+  const signup = async (name, email, password, phone) => {
+    try {
+      const response = await authAPI.register({ name, email, password, phone });
+      localStorage.setItem('token', response.access_token);
+      await loadUser();
+      return true;
+    } catch (error) {
+      console.error('Signup failed:', error);
+      throw error;
+    }
   };
 
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
   };
 
-  const updateProfile = (updatedData) => {
-    const updatedUser = { ...user, ...updatedData };
-    setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+  const updateProfile = async (updatedData) => {
+    try {
+      const userData = await authAPI.updateProfile(updatedData);
+      setUser(userData);
+      return true;
+    } catch (error) {
+      console.error('Profile update failed:', error);
+      throw error;
+    }
   };
 
   return (
     <AuthContext.Provider value={{
       user,
       isAuthenticated,
+      loading,
       login,
       signup,
       logout,
-      updateProfile
+      updateProfile,
+      loadUser
     }}>
       {children}
     </AuthContext.Provider>
