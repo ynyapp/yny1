@@ -7,7 +7,7 @@ from bson import ObjectId
 
 router = APIRouter(prefix="/reviews", tags=["reviews"])
 
-from server import db
+from database import db
 
 @router.post("", response_model=ReviewResponse, status_code=status.HTTP_201_CREATED)
 async def create_review(review_data: ReviewCreate, current_user: dict = Depends(get_current_user)):
