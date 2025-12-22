@@ -231,10 +231,11 @@ const RestaurantDetailPage = () => {
           <div className="lg:col-span-2">
             {/* Tabs */}
             <div className="bg-white rounded-2xl shadow-sm mb-6 sticky top-20 z-20">
-              <div className="flex border-b">
+              <div className="flex border-b overflow-x-auto">
                 {[
+                  { id: 'overview', label: 'Genel Bakış', icon: Info },
                   { id: 'menu', label: 'Menü', icon: UtensilsCrossed },
-                  { id: 'info', label: 'Bilgiler', icon: Info },
+                  { id: 'about', label: 'Hakkında', icon: Info },
                   { id: 'reviews', label: 'Değerlendirmeler', icon: MessageSquare },
                   { id: 'photos', label: 'Fotoğraflar', icon: Camera },
                 ].map((tab) => {
@@ -243,7 +244,7 @@ const RestaurantDetailPage = () => {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`flex-1 flex items-center justify-center gap-2 py-4 font-medium transition border-b-2 ${
+                      className={`flex items-center justify-center gap-2 py-4 px-6 font-medium transition border-b-2 whitespace-nowrap ${
                         activeTab === tab.id 
                           ? 'border-red-600 text-red-600' 
                           : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -258,6 +259,116 @@ const RestaurantDetailPage = () => {
             </div>
 
             {/* Tab Content */}
+            {activeTab === 'overview' && (
+              <div className="space-y-6">
+                {/* Quick Info Cards */}
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="bg-white rounded-xl p-6 border-l-4 border-red-500">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Star className="w-6 h-6 text-yellow-500 fill-yellow-500" />
+                      <h3 className="font-semibold text-gray-900">Değerlendirme</h3>
+                    </div>
+                    <p className="text-3xl font-bold text-gray-900">{restaurant.rating || 'N/A'}</p>
+                    <p className="text-sm text-gray-500">{reviews.length} değerlendirme</p>
+                  </div>
+                  
+                  <div className="bg-white rounded-xl p-6 border-l-4 border-green-500">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Clock className="w-6 h-6 text-green-500" />
+                      <h3 className="font-semibold text-gray-900">Çalışma Saatleri</h3>
+                    </div>
+                    <p className="text-lg font-semibold text-gray-900">Şu an açık</p>
+                    <p className="text-sm text-gray-500">{restaurant.deliveryTime}</p>
+                  </div>
+                  
+                  <div className="bg-white rounded-xl p-6 border-l-4 border-blue-500">
+                    <div className="flex items-center gap-3 mb-2">
+                      <MapPin className="w-6 h-6 text-blue-500" />
+                      <h3 className="font-semibold text-gray-900">Konum</h3>
+                    </div>
+                    <p className="text-sm text-gray-700">{restaurant.location?.city || 'İstanbul'}</p>
+                    <p className="text-xs text-gray-500 mt-1">{restaurant.location?.address || ''}</p>
+                  </div>
+                </div>
+
+                {/* About Section */}
+                {restaurant.description && (
+                  <div className="bg-white rounded-xl p-6">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">Açıklama</h3>
+                    <p className="text-gray-600 leading-relaxed">{restaurant.description}</p>
+                  </div>
+                )}
+
+                {/* Service Options */}
+                <div className="bg-white rounded-xl p-6">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Hizmet Seçenekleri</h3>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {isDeliveryRestaurant && (
+                      <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                        <Check className="w-5 h-5 text-green-600" />
+                        <span className="text-gray-700">Online Sipariş</span>
+                      </div>
+                    )}
+                    {isDineInRestaurant && (
+                      <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+                        <Check className="w-5 h-5 text-blue-600" />
+                        <span className="text-gray-700">Rezervasyon</span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                      <Check className="w-5 h-5 text-gray-600" />
+                      <span className="text-gray-700">Paket Servis</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Popular Items */}
+                {menuItems.length > 0 && (
+                  <div className="bg-white rounded-xl p-6">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Popüler Ürünler</h3>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {menuItems.slice(0, 4).map((item) => (
+                        <div key={item.id} className="flex gap-3 p-3 border rounded-lg hover:shadow-md transition">
+                          {item.image && (
+                            <img src={item.image} alt={item.name} className="w-20 h-20 rounded-lg object-cover" />
+                          )}
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-900">{item.name}</h4>
+                            <p className="text-red-600 font-semibold mt-1">{item.price}₺</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Atmosphere & Features */}
+                <div className="bg-white rounded-xl p-6">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Özellikler ve Ortam</h3>
+                  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    {restaurant.tags?.map((tag, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-gray-700">
+                        <Check className="w-4 h-4 text-green-600" />
+                        <span>{tag}</span>
+                      </div>
+                    ))}
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Kredi Kartı</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>WiFi</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Aileler İçin Uygun</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {activeTab === 'menu' && (
               <div className="space-y-6">
                 {/* Category Filter */}
@@ -292,6 +403,80 @@ const RestaurantDetailPage = () => {
                         isDeliveryAvailable={isDeliveryRestaurant}
                       />
                     ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'about' && (
+              <div className="bg-white rounded-2xl p-6 space-y-6">
+                {/* Contact Info */}
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <Phone className="w-5 h-5 text-red-600" /> İletişim Bilgileri
+                  </h3>
+                  {restaurant.phone && (
+                    <a href={`tel:${restaurant.phone}`} className="text-red-600 hover:underline block mb-2">
+                      {restaurant.phone}
+                    </a>
+                  )}
+                  <p className="text-gray-600">{restaurant.location?.address || 'Adres bilgisi yok'}</p>
+                </div>
+
+                {/* Opening Hours */}
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-red-600" /> Çalışma Saatleri
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    {['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'].map((day) => (
+                      <div key={day} className="flex justify-between">
+                        <span className="text-gray-600">{day}</span>
+                        <span className="font-medium text-gray-900">10:00 - 23:00</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Payment Methods */}
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Ödeme Yöntemleri</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {['Kredi Kartı', 'Banka Kartı', 'Nakit', 'Temassız Ödeme'].map((method) => (
+                      <span key={method} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">
+                        {method}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Accessibility */}
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Erişilebilirlik</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Tekerlekli Sandalye Erişimi</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600" />
+                      <span>Engelli Tuvaleti</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Location Map */}
+                {restaurant.location?.coordinates && (
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <MapPin className="w-5 h-5 text-red-600" /> Konum
+                    </h3>
+                    <RestaurantMap 
+                      restaurants={[restaurant]}
+                      center={[restaurant.location.coordinates.lat, restaurant.location.coordinates.lng]}
+                      zoom={15}
+                      height="300px"
+                    />
                   </div>
                 )}
               </div>
