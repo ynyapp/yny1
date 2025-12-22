@@ -66,9 +66,11 @@ const LoginPage = () => {
         <div className="max-w-md mx-auto">
           <div className="bg-white rounded-xl shadow-lg p-8">
             <div className="text-center mb-8">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-2xl">Y</span>
-              </div>
+              <img 
+                src="https://customer-assets.emergentagent.com/job_food-order-31/artifacts/0me4i8sz_images%20%281%29.jpeg" 
+                alt="Yemek Nerede Yenir" 
+                className="w-16 h-16 mx-auto mb-4 object-contain"
+              />
               <h1 className="text-2xl font-bold text-gray-900 mb-2">
                 {isLogin ? 'Giriş Yap' : 'Hesap Oluştur'}
               </h1>
