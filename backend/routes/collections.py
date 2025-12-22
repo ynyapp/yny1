@@ -12,7 +12,7 @@ def get_db():
     from server import db
     return db
 
-@router.get("/", response_model=List[CollectionResponse])
+@router.get("/", response_model=List[CollectionResponse], include_in_schema=True)
 async def get_collections(
     category: Optional[str] = None,
     is_active: bool = True,
