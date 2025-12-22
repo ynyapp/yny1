@@ -269,7 +269,13 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Homepage Display and Navigation"
+    - "Restaurants Page Functionality"
+    - "Restaurant Detail Page"
+    - "Authentication System"
+    - "Cart and Checkout Flow"
+    - "User Profile Management"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
@@ -277,3 +283,5 @@ test_plan:
 agent_communication:
   - agent: "testing"
     message: "Comprehensive backend API testing completed. Fixed critical circular import issue and several data model/ID format issues. All 14 test scenarios now passing with 100% success rate. Backend is fully functional and ready for production use."
+  - agent: "testing"
+    message: "Starting comprehensive frontend testing of Yemek Nerede Yenir food delivery app. Will test homepage, restaurants page, restaurant details, authentication, cart/checkout, and user profile functionality as requested."
