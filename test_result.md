@@ -345,7 +345,6 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Admin Panel Frontend"
     - "Reservations API"
     - "Notifications API"
   stuck_tasks: []
