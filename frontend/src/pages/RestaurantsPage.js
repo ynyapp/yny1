@@ -497,12 +497,27 @@ const RestaurantCard = ({ restaurant, onClick, compact = false }) => {
               </span>
             )}
           </div>
-          <div className="flex gap-2 mt-2">
+          <div className="flex gap-2 mt-2 flex-wrap">
+            {restaurant.isPromoted && (
+              <span className="text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold px-2 py-0.5 rounded-full">
+                {restaurant.promotionText}
+              </span>
+            )}
+            {restaurant.isGoldPartner && (
+              <span className="text-xs bg-gradient-to-r from-yellow-400 to-yellow-600 text-white font-bold px-2 py-0.5 rounded-full">
+                👑 Gold
+              </span>
+            )}
             {restaurant.hasDelivery !== false && (
               <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Teslimat</span>
             )}
             {restaurant.hasTableBooking && (
               <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Rezervasyon</span>
+            )}
+            {restaurant.offers && restaurant.offers.length > 0 && (
+              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">
+                💰 {restaurant.offers[0]}
+              </span>
             )}
           </div>
         </div>
