@@ -25,13 +25,21 @@ const ProfilePage = () => {
     return null;
   }
 
-  const handleSave = () => {
-    updateProfile(formData);
-    setIsEditing(false);
-    toast({
-      title: "Başarılı!",
-      description: "Profil bilgileriniz güncellendi.",
-    });
+  const handleSave = async () => {
+    try {
+      await updateProfile(formData);
+      setIsEditing(false);
+      toast({
+        title: "Başarılı!",
+        description: "Profil bilgileriniz güncellendi.",
+      });
+    } catch (error) {
+      toast({
+        title: "Hata",
+        description: "Profil güncellenemedi.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleChange = (e) => {
