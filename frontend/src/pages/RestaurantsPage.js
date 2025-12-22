@@ -238,7 +238,7 @@ const RestaurantsPage = () => {
                           </div>
                           <div className="flex items-center gap-1">
                             <MapPin className="w-4 h-4" />
-                            <span>{restaurant.location}</span>
+                            <span>{restaurant.location?.address || restaurant.location?.city}</span>
                           </div>
                           <span className="font-semibold text-gray-700">{restaurant.priceRange}</span>
                         </div>
