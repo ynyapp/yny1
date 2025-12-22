@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { turkishCities, cuisineTypes } from '../mockData';
 import { restaurantsAPI } from '../api';
+import Collections from '../components/Collections';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
