@@ -21,25 +21,33 @@ const LoginPage = () => {
     phone: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (isLogin) {
-      login(formData.email, formData.password);
+    try {
+      if (isLogin) {
+        await login(formData.email, formData.password);
+        toast({
+          title: "Başarılı!",
+          description: "Giriş başarıyla tamamlandı.",
+        });
+      } else {
+        await signup(formData.name, formData.email, formData.password, formData.phone);
+        toast({
+          title: "Hoş Geldiniz!",
+          description: "Hesabınız başarıyla oluşturuldu.",
+        });
+      }
+      
+      const redirect = searchParams.get('redirect') || '/';
+      setTimeout(() => navigate(redirect), 500);
+    } catch (error) {
       toast({
-        title: "Başarılı!",
-        description: "Giriş başarıyla tamamlandı.",
-      });
-    } else {
-      signup(formData.name, formData.email, formData.password, formData.phone);
-      toast({
-        title: "Hoş Geldiniz!",
-        description: "Hesabınız başarıyla oluşturuldu.",
+        title: "Hata",
+        description: error.response?.data?.detail || "İşlem başarısız oldu.",
+        variant: "destructive"
       });
     }
-    
-    const redirect = searchParams.get('redirect') || '/';
-    setTimeout(() => navigate(redirect), 500);
   };
 
   const handleChange = (e) => {
