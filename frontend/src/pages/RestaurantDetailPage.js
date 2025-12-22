@@ -11,6 +11,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import RestaurantMap from '../components/RestaurantMap';
+import FeatureTag from '../components/FeatureTag';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { toast } from '../hooks/use-toast';
@@ -345,25 +346,22 @@ const RestaurantDetailPage = () => {
                 {/* Atmosphere & Features */}
                 <div className="bg-white rounded-xl p-6">
                   <h3 className="text-xl font-semibold text-gray-900 mb-4">Özellikler ve Ortam</h3>
-                  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+                  <div className="flex flex-wrap gap-2">
                     {restaurant.tags?.map((tag, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-gray-700">
-                        <Check className="w-4 h-4 text-green-600" />
-                        <span>{tag}</span>
-                      </div>
+                      <FeatureTag key={idx} feature={tag} variant="default" />
                     ))}
-                    <div className="flex items-center gap-2 text-gray-700">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>Kredi Kartı</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-700">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>WiFi</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-700">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>Aileler İçin Uygun</span>
-                    </div>
+                    {restaurant.amenities?.map((amenity, idx) => (
+                      <FeatureTag key={`a-${idx}`} feature={amenity} variant="green" />
+                    ))}
+                    {restaurant.specialFeatures?.map((feature, idx) => (
+                      <FeatureTag key={`sf-${idx}`} feature={feature} variant="purple" />
+                    ))}
+                    {restaurant.atmosphere?.map((atm, idx) => (
+                      <FeatureTag key={`atm-${idx}`} feature={atm} variant="pink" />
+                    ))}
+                    <FeatureTag feature="Kredi Kartı" variant="default" />
+                    <FeatureTag feature="WiFi" variant="green" />
+                    <FeatureTag feature="Aileler İçin Uygun" variant="blue" />
                   </div>
                 </div>
               </div>
