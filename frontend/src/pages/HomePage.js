@@ -105,6 +105,11 @@ const HomePage = () => {
         </div>
       </div>
 
+      {/* Collections */}
+      <div className="container mx-auto px-4 py-12">
+        <Collections />
+      </div>
+
       {/* Popular Restaurants */}
       <div className="container mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-6">
