@@ -41,6 +41,13 @@ class RestaurantBase(BaseModel):
     
     # Special Features
     specialFeatures: List[str] = []  # petFriendly, happyHour, lateNight, breakfast, reservation
+    
+    # Promotions & Offers
+    isPromoted: bool = False
+    promotionText: Optional[str] = None  # "Ad", "Promoted", etc.
+    offers: List[str] = []  # "Flat 15% OFF", "Buy 1 Get 1 Free", "Free Delivery", etc.
+    isGoldPartner: bool = False
+    hasActiveOffer: bool = False
 
 class RestaurantCreate(RestaurantBase):
     pass
