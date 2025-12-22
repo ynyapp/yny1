@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   Star, Clock, MapPin, Phone, Share2, Heart, Calendar, Users,
-  Info, MessageSquare, Camera, ArrowLeft, Check
+  Info, MessageSquare, Camera, ArrowLeft, Check, X
 } from 'lucide-react';
 import { restaurantsAPI, reviewsAPI, reservationsAPI } from '../api';
 import { useAuth } from '../contexts/AuthContext';
