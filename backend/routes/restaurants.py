@@ -7,7 +7,7 @@ from bson import ObjectId
 
 router = APIRouter(prefix="/restaurants", tags=["restaurants"])
 
-from server import db
+from database import db
 
 @router.get("", response_model=dict)
 async def get_restaurants(
