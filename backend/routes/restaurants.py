@@ -93,7 +93,6 @@ async def get_restaurants(
             restaurants.sort(key=lambda x: x.get("distance", float('inf')))
         else:
             restaurants.sort(key=lambda x: x.get("rating", 0), reverse=True)
-            del restaurant["_id"]
         
         # Paginate results
         result = paginate(restaurants, page, page_size)
