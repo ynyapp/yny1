@@ -110,7 +110,7 @@ const RestaurantsPage = () => {
       <Navbar />
 
       {/* Search Bar */}
-      <div className="bg-white border-b">
+      <div className="bg-white border-b sticky top-16 z-40">
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row gap-3">
             <div className="flex-1 flex items-center gap-2 border rounded-lg px-4 py-2 bg-gray-50">
@@ -135,18 +135,85 @@ const RestaurantsPage = () => {
                 className="flex-1 border-none outline-none text-gray-700"
               />
             </div>
-            <Button
-              onClick={() => setShowFilters(!showFilters)}
-              variant="outline"
-              className="md:hidden"
-            >
-              <Filter className="w-5 h-5" />
-            </Button>
           </div>
+        </div>
+
+        {/* Service Type Tabs */}
+        <div className="container mx-auto px-4">
+          <Tabs value={serviceType} onValueChange={setServiceType} className="w-full">
+            <TabsList className="w-full justify-start border-b-0 bg-transparent h-auto p-0">
+              <TabsTrigger
+                value="delivery"
+                className="data-[state=active]:border-b-2 data-[state=active]:border-red-600 rounded-none pb-3 px-6"
+              >
+                🛵 Delivery
+              </TabsTrigger>
+              <TabsTrigger
+                value="dineout"
+                className="data-[state=active]:border-b-2 data-[state=active]:border-red-600 rounded-none pb-3 px-6"
+              >
+                🍽️ Dining
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6">
+        {/* Filter Bar */}
+        <div className="flex flex-wrap items-center gap-3 mb-6">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowFilters(!showFilters)}
+            className="gap-2"
+          >
+            <Filter className="w-4 h-4" />
+            Filtreler
+          </Button>
+
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="px-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-red-600"
+          >
+            <option value="popularity">Popülerlik</option>
+            <option value="rating">En Yüksek Puan</option>
+            <option value="delivery_time">Teslimat Süresi</option>
+            <option value="cost_low">Düşük Fiyat</option>
+            <option value="cost_high">Yüksek Fiyat</option>
+          </select>
+
+          <Button
+            variant={openNow ? "default" : "outline"}
+            size="sm"
+            onClick={() => setOpenNow(!openNow)}
+            className={openNow ? "bg-red-600 text-white" : ""}
+          >
+            Şimdi Açık
+          </Button>
+
+          <Button
+            variant={pureVeg ? "default" : "outline"}
+            size="sm"
+            onClick={() => setPureVeg(!pureVeg)}
+            className={pureVeg ? "bg-green-600 text-white" : ""}
+          >
+            🥬 Vejeteryan
+          </Button>
+
+          {(selectedCuisines.length > 0 || minRating > 0 || pureVeg || openNow) && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearFilters}
+              className="text-red-600"
+            >
+              <X className="w-4 h-4 mr-1" />
+              Filtreleri Temizle
+            </Button>
+          )}
+        </div>
         <div className="flex flex-col md:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className={`md:w-64 ${showFilters ? 'block' : 'hidden md:block'}`}>
