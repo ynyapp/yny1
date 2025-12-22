@@ -32,12 +32,17 @@ const RestaurantsPage = () => {
     sortBy: 'popularity',
     pureVeg: false,
     openNow: false,
+    petFriendly: false,
+    outdoorSeating: false,
   });
 
   const quickFilters = [
     { id: 'rating4', label: 'Puan: 4.0+', active: filters.minRating >= 4 },
+    { id: 'rating45', label: 'Puan: 4.5+', active: filters.minRating >= 4.5 },
     { id: 'openNow', label: 'Şu An Açık', active: filters.openNow },
     { id: 'veg', label: 'Vejetaryen', active: filters.pureVeg },
+    { id: 'petFriendly', label: 'Pet Friendly', active: filters.petFriendly },
+    { id: 'outdoorSeating', label: 'Açık Hava', active: filters.outdoorSeating },
   ];
 
   useEffect(() => {
@@ -120,10 +125,16 @@ const RestaurantsPage = () => {
   const toggleQuickFilter = (filterId) => {
     if (filterId === 'rating4') {
       setFilters(prev => ({ ...prev, minRating: prev.minRating >= 4 ? 0 : 4 }));
+    } else if (filterId === 'rating45') {
+      setFilters(prev => ({ ...prev, minRating: prev.minRating >= 4.5 ? 0 : 4.5 }));
     } else if (filterId === 'openNow') {
       setFilters(prev => ({ ...prev, openNow: !prev.openNow }));
     } else if (filterId === 'veg') {
       setFilters(prev => ({ ...prev, pureVeg: !prev.pureVeg }));
+    } else if (filterId === 'petFriendly') {
+      setFilters(prev => ({ ...prev, petFriendly: !prev.petFriendly }));
+    } else if (filterId === 'outdoorSeating') {
+      setFilters(prev => ({ ...prev, outdoorSeating: !prev.outdoorSeating }));
     }
   };
 
@@ -139,12 +150,14 @@ const RestaurantsPage = () => {
       sortBy: 'popularity',
       pureVeg: false,
       openNow: false,
+      petFriendly: false,
+      outdoorSeating: false,
     });
     setSearchQuery('');
     setSelectedCuisine('');
   };
 
-  const hasActiveFilters = filters.minRating > 0 || filters.openNow || filters.pureVeg || filters.selectedCuisines.length > 0;
+  const hasActiveFilters = filters.minRating > 0 || filters.openNow || filters.pureVeg || filters.petFriendly || filters.outdoorSeating || filters.selectedCuisines.length > 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
