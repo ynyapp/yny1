@@ -10,7 +10,7 @@ from pathlib import Path
 from database import db, client
 
 # Import routes
-from routes import auth, restaurants, menu, orders, reviews, user, admin, geo, coupons, campaigns, reservations, notifications
+from routes import auth, restaurants, menu, orders, reviews, user, admin, geo, coupons, campaigns, reservations, notifications, collections
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -68,6 +68,7 @@ api_router.include_router(coupons.router)
 api_router.include_router(campaigns.router)
 api_router.include_router(reservations.router)
 api_router.include_router(notifications.router)
+api_router.include_router(collections.router)
 
 # Include the main router in the app
 app.include_router(api_router)
