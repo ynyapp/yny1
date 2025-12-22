@@ -59,9 +59,10 @@ async def get_restaurants(
         cursor = db.restaurants.find(query)
         restaurants = await cursor.to_list(length=1000)
         
-        # Convert ObjectId to string
+        # Convert ObjectId to string and remove _id
         for restaurant in restaurants:
             restaurant["id"] = str(restaurant["_id"])
+            del restaurant["_id"]
             
             # Calculate distance if lat/lng provided
             if lat is not None and lng is not None and restaurant.get("location", {}).get("coordinates"):
