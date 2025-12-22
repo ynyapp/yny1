@@ -296,16 +296,28 @@ const DashboardTab = () => {
 // Main Admin Page
 export default function AdminPage() {
   const navigate = useNavigate();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, loading } = useAuth();
   const [activeTab, setActiveTab] = useState('dashboard');
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!loading && !isAuthenticated) {
       navigate('/login');
-      return;
     }
-    // Note: In production, verify admin status from backend
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, loading, navigate]);
+
+  // Show loading while checking auth
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-red-600"></div>
+      </div>
+    );
+  }
+
+  // Redirect handled by useEffect
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const renderTabContent = () => {
     switch (activeTab) {
