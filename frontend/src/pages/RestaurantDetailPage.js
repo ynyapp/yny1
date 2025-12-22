@@ -97,7 +97,13 @@ const RestaurantDetailPage = () => {
   }
 
   const handleAddToCart = (item) => {
-    addToCart(item, restaurant);
+    // Store restaurant info with proper ID
+    const restaurantData = {
+      id: restaurant.id,
+      name: restaurant.name,
+      slug: restaurant.slug
+    };
+    addToCart(item, restaurantData);
     toast({
       title: "Sepete Eklendi",
       description: `${item.name} sepetinize eklendi`,
