@@ -380,11 +380,26 @@ const HomePage = () => {
                   alt={restaurant.name}
                   className="w-full h-44 object-cover group-hover:scale-105 transition duration-300"
                 />
-                {restaurant.hasDelivery && (
-                  <div className="absolute top-3 left-3 bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full">
-                    Teslimat
-                  </div>
-                )}
+                
+                {/* Badges */}
+                <div className="absolute top-3 left-3 flex flex-col gap-2">
+                  {restaurant.isPromoted && (
+                    <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
+                      {restaurant.promotionText}
+                    </span>
+                  )}
+                  {restaurant.isGoldPartner && (
+                    <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
+                      👑 Gold
+                    </span>
+                  )}
+                  {restaurant.hasDelivery && (
+                    <span className="bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+                      Teslimat
+                    </span>
+                  )}
+                </div>
+                
                 <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
                   <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                   <span className="text-sm font-semibold">{restaurant.rating}</span>
@@ -393,6 +408,16 @@ const HomePage = () => {
               <div className="p-4">
                 <h3 className="font-bold text-gray-900 mb-1">{restaurant.name}</h3>
                 <p className="text-sm text-gray-500 mb-3">{restaurant.cuisine}</p>
+                
+                {/* Offers */}
+                {restaurant.offers && restaurant.offers.length > 0 && (
+                  <div className="mb-3">
+                    <span className="bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-1 rounded">
+                      💰 {restaurant.offers[0]}
+                    </span>
+                  </div>
+                )}
+                
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-1 text-gray-500">
                     <Clock className="w-4 h-4" />
