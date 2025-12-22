@@ -6,7 +6,7 @@ from models.collection import Collection, CollectionCreate, CollectionResponse
 import os
 from bson import ObjectId
 
-router = APIRouter(prefix="/api/collections", tags=["collections"])
+router = APIRouter(prefix="/collections", tags=["collections"])
 
 def get_db():
     from server import db
