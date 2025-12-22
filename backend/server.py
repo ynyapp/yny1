@@ -10,7 +10,7 @@ from pathlib import Path
 from database import db, client
 
 # Import routes
-from routes import auth, restaurants, menu, orders, reviews, user, admin
+from routes import auth, restaurants, menu, orders, reviews, user, admin, geo, coupons, campaigns, reservations, notifications
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
