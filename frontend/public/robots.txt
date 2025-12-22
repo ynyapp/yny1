@@ -1,0 +1,10 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /cart
+Disallow: /checkout
+Disallow: /profile
+Disallow: /orders
+
+Sitemap: https://yemek-rehberi-2.preview.emergentagent.com/sitemap.xml
