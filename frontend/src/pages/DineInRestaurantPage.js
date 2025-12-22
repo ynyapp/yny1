@@ -278,11 +278,14 @@ const DineInRestaurantPage = () => {
                     <div>
                       <h4 className="font-medium text-gray-700 mb-2">Ortam</h4>
                       <div className="flex flex-wrap gap-2">
-                        {['Şık', 'Romantik', 'Rahat', 'Modern'].map((item) => (
-                          <span key={item} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">
-                            {item}
-                          </span>
-                        ))}
+                        {restaurant.atmosphere && restaurant.atmosphere.length > 0 
+                          ? restaurant.atmosphere.map((item, idx) => (
+                              <FeatureTag key={idx} feature={item} variant="pink" />
+                            ))
+                          : ['Şık', 'Romantik', 'Rahat', 'Modern'].map((item) => (
+                              <FeatureTag key={item} feature={item} variant="pink" />
+                            ))
+                        }
                       </div>
                     </div>
                     
@@ -290,28 +293,17 @@ const DineInRestaurantPage = () => {
                       <h4 className="font-medium text-gray-700 mb-2">Kalabalık</h4>
                       <div className="flex flex-wrap gap-2">
                         {['Turistler', 'İş Toplantıları', 'Aileler', 'Çiftler'].map((item) => (
-                          <span key={item} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">
-                            {item}
-                          </span>
+                          <FeatureTag key={item} feature={item} variant="blue" />
                         ))}
                       </div>
                     </div>
 
                     <div>
                       <h4 className="font-medium text-gray-700 mb-2">Teklifler</h4>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-gray-700">
-                          <Check className="w-4 h-4 text-green-600" />
-                          <span>Alkol Servisi</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-gray-700">
-                          <Check className="w-4 h-4 text-green-600" />
-                          <span>Kahve ve Tatlı</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-gray-700">
-                          <Check className="w-4 h-4 text-green-600" />
-                          <span>Kokteyl</span>
-                        </div>
+                      <div className="flex flex-wrap gap-2">
+                        {['Alkol Servisi', 'Kahve ve Tatlı', 'Kokteyl'].map((item) => (
+                          <FeatureTag key={item} feature={item} variant="purple" />
+                        ))}
                       </div>
                     </div>
                   </div>
