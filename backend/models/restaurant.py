@@ -39,7 +39,7 @@ class Restaurant(RestaurantBase):
 
 class RestaurantResponse(RestaurantBase):
     id: str
-    createdAt: datetime
+    createdAt: Optional[datetime] = None
 
     class Config:
         orm_mode = True
