@@ -310,7 +310,7 @@ const RestaurantDetailPage = () => {
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Adres</h3>
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-red-600 mt-1" />
-                  <p className="text-gray-700">{restaurant.location}</p>
+                  <p className="text-gray-700">{restaurant.location?.address}, {restaurant.location?.city}</p>
                 </div>
               </div>
               
