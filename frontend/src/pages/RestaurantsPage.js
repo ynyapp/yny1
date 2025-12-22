@@ -217,7 +217,7 @@ const RestaurantsPage = () => {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className={`md:w-64 ${showFilters ? 'block' : 'hidden md:block'}`}>
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-20">
+            <div className="bg-white rounded-xl shadow-md p-6 sticky top-32">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-bold text-gray-900">Filtreler</h3>
                 {(selectedCuisines.length > 0 || minRating > 0) && (
@@ -279,87 +279,122 @@ const RestaurantsPage = () => {
 
           {/* Restaurant List */}
           <div className="flex-1">
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">
-                {restaurants.length} Restoran Bulundu
-              </h2>
-              <p className="text-gray-600">{selectedCity} bölgesinde</p>
-            </div>
-
-            {restaurants.length === 0 ? (
-              <div className="bg-white rounded-xl p-12 text-center">
-                <p className="text-gray-500 text-lg">Arama kriterlerinize uygun restoran bulunamadı.</p>
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
+                <p className="text-gray-600 mt-4">Restoranlar yükleniyor...</p>
               </div>
             ) : (
-              <div className="space-y-4">
-                {restaurants.map((restaurant) => (
-                  <div
-                    key={restaurant.id}
-                    onClick={() => navigate(`/restaurant/${restaurant.id}`)}
-                    className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer"
-                  >
-                    <div className="flex flex-col sm:flex-row">
-                      <div className="relative w-full sm:w-48 h-48">
-                        <img
-                          src={restaurant.image}
-                          alt={restaurant.name}
-                          className="w-full h-full object-cover"
-                        />
-                        {restaurant.discount && (
-                          <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                            {restaurant.discount}
-                          </div>
-                        )}
-                        {!restaurant.isOpen && (
-                          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                            <span className="text-white font-semibold">Kapalı</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-1 p-4">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <h3 className="text-xl font-bold text-gray-900">{restaurant.name}</h3>
-                            <p className="text-sm text-gray-600">{restaurant.cuisine}</p>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                            <span className="font-semibold">{restaurant.rating}</span>
-                            <span className="text-gray-500 text-sm">({restaurant.reviewCount})</span>
-                          </div>
-                        </div>
-                        
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {restaurant.tags.map(tag => (
-                            <span
-                              key={tag}
-                              className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        
-                        <div className="flex items-center gap-4 text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            <span>{restaurant.deliveryTime}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <MapPin className="w-4 h-4" />
-                            <span>{restaurant.location?.address || restaurant.location?.city}</span>
-                          </div>
-                          <span className="font-semibold text-gray-700">{restaurant.priceRange}</span>
-                        </div>
-                        
-                        <div className="mt-3 pt-3 border-t text-sm text-gray-600">
-                          Min. Sipariş: {restaurant.minOrder}₺ • Teslimat: {restaurant.deliveryFee}₺
-                        </div>
-                      </div>
-                    </div>
+              <>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    {restaurants.length} Restoran Bulundu
+                  </h2>
+                  <p className="text-gray-600">{selectedCity} bölgesinde • {serviceType === 'delivery' ? 'Paket Servis' : 'Restoranda Yemek'}</p>
+                </div>
+
+                {restaurants.length === 0 ? (
+                  <div className="bg-white rounded-xl p-12 text-center">
+                    <p className="text-gray-500 text-lg">Arama kriterlerinize uygun restoran bulunamadı.</p>
                   </div>
-                ))}
-              </div>
+                ) : (
+                  <div className="space-y-4">
+                    {restaurants.map((restaurant) => (
+                      <div
+                        key={restaurant.id}
+                        onClick={() => navigate(`/restaurant/${restaurant.slug || restaurant.id}`)}
+                        className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer border border-gray-100"
+                      >
+                        <div className="flex flex-col sm:flex-row">
+                          <div className="relative w-full sm:w-64 h-48">
+                            <img
+                              src={restaurant.image}
+                              alt={restaurant.name}
+                              className="w-full h-full object-cover"
+                            />
+                            {restaurant.discount && (
+                              <div className="absolute top-3 left-3 bg-blue-600 text-white px-3 py-1 rounded text-sm font-semibold">
+                                💰 {restaurant.discount}
+                              </div>
+                            )}
+                            {!restaurant.isOpen && (
+                              <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+                                <span className="text-white font-semibold text-lg">Şu Anda Kapalı</span>
+                              </div>
+                            )}
+                            {restaurant.isOpen && serviceType === 'delivery' && (
+                              <div className="absolute bottom-3 left-3 bg-white px-2 py-1 rounded text-xs font-semibold text-gray-700 flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {restaurant.deliveryTime}
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1 p-5">
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex-1">
+                                <h3 className="text-xl font-bold text-gray-900 mb-1">{restaurant.name}</h3>
+                                <p className="text-sm text-gray-600 mb-2">{restaurant.cuisine}</p>
+                                <div className="flex flex-wrap gap-2 mb-3">
+                                  {restaurant.tags.slice(0, 3).map(tag => (
+                                    <span
+                                      key={tag}
+                                      className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1 bg-green-600 text-white px-2 py-1 rounded">
+                                <span className="font-bold">{restaurant.rating}</span>
+                                <Star className="w-3 h-3 fill-white" />
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                              <div className="flex items-center gap-1">
+                                <MapPin className="w-4 h-4" />
+                                <span>{restaurant.location?.city}</span>
+                              </div>
+                              <span>•</span>
+                              <span className="font-semibold text-gray-700">{restaurant.priceRange}</span>
+                              {serviceType === 'delivery' && (
+                                <>
+                                  <span>•</span>
+                                  <span>Min. {restaurant.minOrder}₺</span>
+                                </>
+                              )}
+                            </div>
+                            
+                            {serviceType === 'delivery' && (
+                              <div className="flex items-center gap-2 text-xs text-gray-500 pt-3 border-t">
+                                <span>🚚 Teslimat Ücreti: {restaurant.deliveryFee}₺</span>
+                                <span>•</span>
+                                <span>{restaurant.reviewCount} değerlendirme</span>
+                              </div>
+                            )}
+                            
+                            {serviceType === 'dineout' && restaurant.isOpen && (
+                              <div className="mt-3">
+                                <Button
+                                  size="sm"
+                                  className="bg-red-600 hover:bg-red-700 text-white"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(`/restaurant/${restaurant.slug || restaurant.id}`);
+                                  }}
+                                >
+                                  Rezervasyon Yap
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
