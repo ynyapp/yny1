@@ -30,16 +30,26 @@ async def create_order(order_data: OrderCreate, current_user: dict = Depends(get
             status="confirmed"
         )
         
-        result = await db.orders.insert_one(order.dict(by_alias=True))
+        # Insert order
+        order_dict = order.dict(by_alias=True)
+        result = await db.orders.insert_one(order_dict)
         order_id = str(result.inserted_id)
         
         # Get created order
-        created_order = await db.orders.find_one({"_id": ObjectId(order_id)})
+        created_order = await db.orders.find_one({"_id": result.inserted_id})
+        if not created_order:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to retrieve created order"
+            )
+            
         created_order["id"] = str(created_order["_id"])
         del created_order["_id"]
         
         return created_order
     
+    except HTTPException:
+        raise
     except Exception as e:
         log_error(e, "create_order")
         raise HTTPException(
