@@ -337,6 +337,24 @@ const RestaurantsPage = () => {
       {/* Cuisine Chips */}
       <div className="bg-white border-b py-3">
         <div className="container mx-auto px-4">
+          {/* Selected Feature Info */}
+          {selectedFeature && (
+            <div className="mb-3 flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <span className="text-sm text-blue-700">
+                <strong>{selectedFeature}</strong> özelliğine sahip restoranlar gösteriliyor
+              </span>
+              <button
+                onClick={() => {
+                  setSelectedFeature('');
+                  navigate('/restaurants');
+                }}
+                className="ml-auto p-1 hover:bg-blue-100 rounded"
+              >
+                <X className="w-4 h-4 text-blue-700" />
+              </button>
+            </div>
+          )}
+          
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             <button
               onClick={() => setFilters(prev => ({ ...prev, selectedCuisines: [] }))}
