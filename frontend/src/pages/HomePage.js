@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import RestaurantMap from '../components/RestaurantMap';
 import LocationSearch from '../components/LocationSearch';
+import SEO from '../components/SEO';
 
 const HomePage = () => {
   const navigate = useNavigate();
