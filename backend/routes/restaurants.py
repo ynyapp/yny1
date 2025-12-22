@@ -107,7 +107,6 @@ async def get_restaurant_by_id(restaurant_id: str):
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Restaurant not found"
             )
-            )
         
         restaurant["id"] = str(restaurant["_id"])
         del restaurant["_id"]
