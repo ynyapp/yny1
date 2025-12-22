@@ -95,6 +95,14 @@ async def startup_db_client():
         await db.orders.create_index("orderNumber", unique=True)
         await db.reviews.create_index("restaurantId")
         await db.reviews.create_index("userId")
+        # New indexes for new collections
+        await db.coupons.create_index("code", unique=True)
+        await db.campaigns.create_index("isActive")
+        await db.api_keys.create_index("key", unique=True)
+        await db.reservations.create_index("reservationCode", unique=True)
+        await db.reservations.create_index("restaurantId")
+        await db.notifications.create_index("userId")
+        await db.restaurants.create_index([("location.coordinates.lat", 1), ("location.coordinates.lng", 1)])
         logger.info("Database indexes created successfully")
     except Exception as e:
         logger.warning(f"Index creation warning: {e}")
