@@ -8,7 +8,7 @@ from datetime import datetime
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
-from server import db
+from database import db
 
 @router.post("", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
 async def create_order(order_data: OrderCreate, current_user: dict = Depends(get_current_user)):
