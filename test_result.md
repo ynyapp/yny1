@@ -190,7 +190,77 @@ backend:
         comment: "Fixed ObjectId import issues and added support for both string and ObjectId user IDs. Both get profile and update profile working correctly"
 
 frontend:
-  # No frontend testing performed as per instructions
+  - task: "Homepage Display and Navigation"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/HomePage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Testing homepage logo display, search functionality, cuisine categories, collections, and popular restaurants navigation"
+
+  - task: "Restaurants Page Functionality"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/RestaurantsPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Testing delivery vs dining tabs, filters (cuisine, rating, pure veg, open now), sorting options, and restaurant card interactions"
+
+  - task: "Restaurant Detail Page"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/RestaurantDetailPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Testing restaurant info display, menu/reviews/info tabs, add to cart functionality, and cart updates"
+
+  - task: "Authentication System"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/LoginPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Testing user registration and login with specified test credentials (Test User, test@test.com, test123, +90 555 1234567)"
+
+  - task: "Cart and Checkout Flow"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/CartPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Testing cart display, item management, checkout process, address selection, payment method selection, and order placement"
+
+  - task: "User Profile Management"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/ProfilePage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Testing profile view, address management, and order history display"
 
 metadata:
   created_by: "testing_agent"
