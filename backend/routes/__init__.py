@@ -1,3 +1,12 @@
-from . import auth, restaurants, menu, orders, reviews, user
-
-__all__ = ['auth', 'restaurants', 'menu', 'orders', 'reviews', 'user']
+from . import auth
+from . import restaurants
+from . import menu
+from . import orders
+from . import reviews
+from . import user
+from . import admin
+from . import geo
+from . import coupons
+from . import campaigns
+from . import reservations
+from . import notifications
