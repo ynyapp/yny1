@@ -201,6 +201,7 @@ class AdminAPITester:
         # Test POST create coupon
         coupon_data = {
             "code": "TEST2024",
+            "name": "Test Coupon 2024",
             "description": "Test coupon for API testing",
             "discountType": "percentage",
             "discountValue": 15,
