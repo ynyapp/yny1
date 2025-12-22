@@ -5,6 +5,8 @@ import { restaurantsAPI } from '../api';
 import { cuisineTypes, turkishCities } from '../mockData';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import Collections from '../components/Collections';
+import FilterModal from '../components/FilterModal';
 import { Button } from '../components/ui/button';
 import { Checkbox } from '../components/ui/checkbox';
 import { Slider } from '../components/ui/slider';
@@ -17,19 +19,24 @@ const RestaurantsPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [selectedCity, setSelectedCity] = useState(searchParams.get('city') || 'İstanbul');
-  const [selectedCuisines, setSelectedCuisines] = useState([]);
-  const [priceRange, setPriceRange] = useState([0, 3]);
-  const [minRating, setMinRating] = useState(0);
-  const [showFilters, setShowFilters] = useState(false);
-  const [serviceType, setServiceType] = useState('delivery'); // delivery or dineout
-  const [sortBy, setSortBy] = useState('popularity'); // popularity, rating, cost_low, cost_high, delivery_time
-  const [showMoreFilters, setShowMoreFilters] = useState(false);
-  const [pureVeg, setPureVeg] = useState(false);
-  const [openNow, setOpenNow] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [serviceType, setServiceType] = useState('delivery');
+  
+  // Filter states
+  const [filters, setFilters] = useState({
+    selectedCuisines: [],
+    minRating: 0,
+    sortBy: 'popularity',
+    pureVeg: false,
+    openNow: false,
+    outdoorSeating: false,
+    petFriendly: false,
+    servesAlcohol: false,
+  });
 
   useEffect(() => {
     fetchRestaurants();
-  }, [searchQuery, selectedCity, selectedCuisines, minRating, serviceType, sortBy, pureVeg, openNow]);
+  }, [searchQuery, selectedCity, filters, serviceType]);
 
   const fetchRestaurants = async () => {
     try {
@@ -37,28 +44,26 @@ const RestaurantsPage = () => {
       const params = {
         city: selectedCity,
         search: searchQuery,
-        min_rating: minRating || undefined,
+        min_rating: filters.minRating || undefined,
       };
       
-      if (selectedCuisines.length > 0) {
-        params.cuisine = selectedCuisines[0];
+      if (filters.selectedCuisines.length > 0) {
+        params.cuisine = filters.selectedCuisines[0];
       }
 
       const data = await restaurantsAPI.getAll(params);
       let filtered = data.items || data;
 
-      // Filter by pure veg
-      if (pureVeg) {
+      // Apply additional filters
+      if (filters.pureVeg) {
         filtered = filtered.filter(r => r.tags?.includes('Vejetaryen'));
       }
-
-      // Filter by open now
-      if (openNow) {
+      if (filters.openNow) {
         filtered = filtered.filter(r => r.isOpen);
       }
 
       // Sort restaurants
-      filtered = sortRestaurants(filtered, sortBy);
+      filtered = sortRestaurants(filtered, filters.sortBy);
 
       setRestaurants(filtered);
     } catch (error) {
@@ -84,25 +89,36 @@ const RestaurantsPage = () => {
           const bTime = parseInt(b.deliveryTime.split('-')[0]);
           return aTime - bTime;
         });
-      default: // popularity
+      default:
         return sorted.sort((a, b) => b.reviewCount - a.reviewCount);
     }
   };
 
-  const toggleCuisine = (cuisine) => {
-    if (selectedCuisines.includes(cuisine)) {
-      setSelectedCuisines(selectedCuisines.filter(c => c !== cuisine));
-    } else {
-      setSelectedCuisines([...selectedCuisines, cuisine]);
-    }
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
   };
 
-  const clearFilters = () => {
-    setSelectedCuisines([]);
-    setPriceRange([0, 3]);
-    setMinRating(0);
-    setPureVeg(false);
-    setOpenNow(false);
+  const clearAllFilters = () => {
+    setFilters({
+      selectedCuisines: [],
+      minRating: 0,
+      sortBy: 'popularity',
+      pureVeg: false,
+      openNow: false,
+      outdoorSeating: false,
+      petFriendly: false,
+      servesAlcohol: false,
+    });
+  };
+
+  const hasActiveFilters = () => {
+    return filters.selectedCuisines.length > 0 || 
+           filters.minRating > 0 || 
+           filters.pureVeg || 
+           filters.openNow ||
+           filters.outdoorSeating ||
+           filters.petFriendly ||
+           filters.servesAlcohol;
   };
 
   return (
