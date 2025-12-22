@@ -113,7 +113,6 @@ async def get_current_user_info(current_user: dict = Depends(get_current_user)):
         # Try to find user by string ID first, then by ObjectId
         user = await db.users.find_one({"_id": current_user["user_id"]})
         if not user:
-            from bson import ObjectId
             if ObjectId.is_valid(current_user["user_id"]):
                 user = await db.users.find_one({"_id": ObjectId(current_user["user_id"])})
         
