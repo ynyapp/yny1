@@ -289,11 +289,12 @@ class AdminAPITester:
         
         # Test POST create campaign
         campaign_data = {
+            "name": "test-campaign-2024",
             "title": "Test Campaign 2024",
             "description": "Test campaign for API testing",
-            "campaignType": "discount",
-            "imageUrl": "https://example.com/test-campaign.jpg",
-            "targetUrl": "https://example.com/campaign",
+            "image": "https://example.com/test-campaign.jpg",
+            "campaignType": "banner",
+            "targetAudience": "all",
             "couponCode": "TESTCAMP2024",
             "startDate": "2024-01-01T00:00:00Z",
             "endDate": "2024-12-31T23:59:59Z",
