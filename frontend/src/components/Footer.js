@@ -10,10 +10,11 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">Y</span>
-              </div>
-              <span className="text-lg font-bold">Yemek Nerede Yenir</span>
+              <img 
+                src="https://customer-assets.emergentagent.com/job_food-order-31/artifacts/s5lmzema_channels4_banner.jpg" 
+                alt="Yemek Nerede Yenir" 
+                className="h-10 object-contain"
+              />
             </div>
             <p className="text-gray-400 text-sm">
               Türkiye'nin en sevilen online yemek sipariş platformu.
