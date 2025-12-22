@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Search, ArrowRight, TrendingUp, Clock, Star } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { turkishCities, mockRestaurants, cuisineTypes } from '../mockData';
+import { turkishCities, cuisineTypes } from '../mockData';
+import { restaurantsAPI } from '../api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -11,12 +12,24 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [selectedCity, setSelectedCity] = useState('İstanbul');
   const [searchQuery, setSearchQuery] = useState('');
+  const [popularRestaurants, setPopularRestaurants] = useState([]);
+
+  useEffect(() => {
+    loadPopularRestaurants();
+  }, []);
+
+  const loadPopularRestaurants = async () => {
+    try {
+      const data = await restaurantsAPI.getAll({ city: 'İstanbul', page_size: 6 });
+      setPopularRestaurants(data.items || data);
+    } catch (error) {
+      console.error('Failed to load restaurants:', error);
+    }
+  };
 
   const handleSearch = () => {
     navigate(`/restaurants?city=${selectedCity}&search=${searchQuery}`);
   };
-
-  const popularRestaurants = mockRestaurants.slice(0, 6);
 
   return (
     <div className="min-h-screen bg-gray-50">
