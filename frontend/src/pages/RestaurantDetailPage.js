@@ -482,65 +482,6 @@ const RestaurantDetailPage = () => {
               </div>
             )}
 
-            {activeTab === 'info' && (
-              <div className="bg-white rounded-2xl p-6 space-y-6">
-                {/* Description */}
-                {restaurant.description && (
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Hakkında</h3>
-                    <p className="text-gray-600">{restaurant.description}</p>
-                  </div>
-                )}
-
-                {/* Location */}
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                    <MapPin className="w-5 h-5 text-red-600" /> Konum
-                  </h3>
-                  <p className="text-gray-600 mb-4">{restaurant.location?.address || 'Adres bilgisi yok'}</p>
-                  
-                  {restaurant.location?.coordinates && (
-                    <RestaurantMap 
-                      restaurants={[restaurant]}
-                      center={[restaurant.location.coordinates.lat, restaurant.location.coordinates.lng]}
-                      zoom={15}
-                      height="250px"
-                    />
-                  )}
-                </div>
-
-                {/* Contact */}
-                {restaurant.phone && (
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                      <Phone className="w-5 h-5 text-red-600" /> İletişim
-                    </h3>
-                    <a href={`tel:${restaurant.phone}`} className="text-red-600 hover:underline">
-                      {restaurant.phone}
-                    </a>
-                  </div>
-                )}
-
-                {/* Features */}
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Özellikler</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {isDeliveryRestaurant && (
-                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">✓ Online Sipariş</span>
-                    )}
-                    {isDineInRestaurant && (
-                      <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">✓ Rezervasyon</span>
-                    )}
-                    {restaurant.tags?.map((tag, idx) => (
-                      <span key={idx} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
-                        ✓ {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
             {activeTab === 'reviews' && (
               <div className="space-y-4">
                 {/* Rating Summary */}
