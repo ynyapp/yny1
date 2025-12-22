@@ -72,7 +72,7 @@ const ProfilePage = () => {
                 <h2 className="text-xl font-semibold text-gray-900">Kişisel Bilgiler</h2>
                 {!isEditing ? (
                   <Button
-                    onClick={() => setIsEditing(true)>
+                    onClick={() => setIsEditing(true)}
                     variant="outline"
                     size="sm"
                   >
