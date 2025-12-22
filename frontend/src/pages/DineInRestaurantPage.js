@@ -22,7 +22,7 @@ const DineInRestaurantPage = () => {
   const [restaurant, setRestaurant] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('info');
+  const [activeTab, setActiveTab] = useState('overview');
   const [liked, setLiked] = useState(false);
   
   // Reservation state
@@ -180,9 +180,10 @@ const DineInRestaurantPage = () => {
           <div className="lg:col-span-2">
             {/* Tabs */}
             <div className="bg-white rounded-2xl shadow-sm mb-6 sticky top-20 z-20">
-              <div className="flex border-b">
+              <div className="flex border-b overflow-x-auto">
                 {[
-                  { id: 'info', label: 'Bilgiler', icon: Info },
+                  { id: 'overview', label: 'Genel Bakış', icon: Info },
+                  { id: 'about', label: 'Hakkında', icon: Info },
                   { id: 'reviews', label: 'Değerlendirmeler', icon: MessageSquare },
                   { id: 'photos', label: 'Fotoğraflar', icon: Camera },
                 ].map((tab) => {
@@ -206,7 +207,131 @@ const DineInRestaurantPage = () => {
             </div>
 
             {/* Tab Content */}
-            {activeTab === 'info' && (
+            {activeTab === 'overview' && (
+              <div className="space-y-6">
+                {/* Quick Info Cards */}
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="bg-white rounded-xl p-6 border-l-4 border-blue-500">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Star className="w-6 h-6 text-yellow-500 fill-yellow-500" />
+                      <h3 className="font-semibold text-gray-900">Değerlendirme</h3>
+                    </div>
+                    <p className="text-3xl font-bold text-gray-900">{restaurant.rating || 'N/A'}</p>
+                    <p className="text-sm text-gray-500">{reviews.length} değerlendirme</p>
+                  </div>
+                  
+                  <div className="bg-white rounded-xl p-6 border-l-4 border-green-500">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Clock className="w-6 h-6 text-green-500" />
+                      <h3 className="font-semibold text-gray-900">Çalışma Saatleri</h3>
+                    </div>
+                    <p className="text-lg font-semibold text-gray-900">Şu an açık</p>
+                    <p className="text-sm text-gray-500">10:00 - 23:00</p>
+                  </div>
+                  
+                  <div className="bg-white rounded-xl p-6 border-l-4 border-purple-500">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Users className="w-6 h-6 text-purple-500" />
+                      <h3 className="font-semibold text-gray-900">Rezervasyon</h3>
+                    </div>
+                    <p className="text-lg font-semibold text-gray-900">Önerilir</p>
+                    <p className="text-sm text-gray-500">Hafta sonu dolu olabilir</p>
+                  </div>
+                </div>
+
+                {/* About Section */}
+                {restaurant.description && (
+                  <div className="bg-white rounded-xl p-6">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">Hakkımızda</h3>
+                    <p className="text-gray-600 leading-relaxed">{restaurant.description}</p>
+                  </div>
+                )}
+
+                {/* Highlights */}
+                <div className="bg-white rounded-xl p-6">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Öne Çıkan Özellikler</h3>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+                      <Calendar className="w-5 h-5 text-blue-600" />
+                      <span className="text-gray-700">Rezervasyon Kabul Edilir</span>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
+                      <Users className="w-5 h-5 text-purple-600" />
+                      <span className="text-gray-700">Gruplar İçin Uygun</span>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-pink-50 rounded-lg">
+                      <Heart className="w-5 h-5 text-pink-600" />
+                      <span className="text-gray-700">Romantik Ortam</span>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                      <Check className="w-5 h-5 text-green-600" />
+                      <span className="text-gray-700">Açık Hava Oturma</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Atmosphere & Features */}
+                <div className="bg-white rounded-xl p-6">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Ortam ve Özellikler</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-medium text-gray-700 mb-2">Ortam</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {['Şık', 'Romantik', 'Rahat', 'Modern'].map((item) => (
+                          <span key={item} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-gray-700 mb-2">Kalabalık</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {['Turistler', 'İş Toplantıları', 'Aileler', 'Çiftler'].map((item) => (
+                          <span key={item} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-medium text-gray-700 mb-2">Teklifler</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-gray-700">
+                          <Check className="w-4 h-4 text-green-600" />
+                          <span>Alkol Servisi</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-700">
+                          <Check className="w-4 h-4 text-green-600" />
+                          <span>Kahve ve Tatlı</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-700">
+                          <Check className="w-4 h-4 text-green-600" />
+                          <span>Kokteyl</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dining Options */}
+                <div className="bg-white rounded-xl p-6">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Yemek Seçenekleri</h3>
+                  <div className="grid sm:grid-cols-4 gap-3">
+                    {['Kahvaltı', 'Öğle Yemeği', 'Akşam Yemeği', 'Tatlı'].map((option) => (
+                      <div key={option} className="flex items-center justify-center gap-2 p-3 border rounded-lg">
+                        <Check className="w-4 h-4 text-green-600" />
+                        <span className="text-gray-700">{option}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'about' && (
               <div className="bg-white rounded-2xl p-8 space-y-8">
                 {/* Description */}
                 {restaurant.description && (
