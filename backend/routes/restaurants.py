@@ -96,18 +96,17 @@ async def get_restaurant_by_id(restaurant_id: str):
     try:
         log_request(f"/api/restaurants/id/{restaurant_id}", "GET")
         
-        if not ObjectId.is_valid(restaurant_id):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid restaurant ID"
-            )
+        # Try to find by 'id' field first (string), then by '_id' (ObjectId)
+        restaurant = await db.restaurants.find_one({"id": restaurant_id})
         
-        restaurant = await db.restaurants.find_one({"_id": ObjectId(restaurant_id)})
+        if not restaurant and ObjectId.is_valid(restaurant_id):
+            restaurant = await db.restaurants.find_one({"_id": ObjectId(restaurant_id)})
         
         if not restaurant:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Restaurant not found"
+            )
             )
         
         restaurant["id"] = str(restaurant["_id"])
