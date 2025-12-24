@@ -8,12 +8,13 @@ import {
   Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useCart } from '../contexts/CartContext';
-import { useAuth } from '../contexts/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart, clearCart } from '../store/slices/cartSlice';
 
 const CartScreen = ({ navigation }) => {
-  const { cartItems, restaurant, getCartTotal, addToCart, removeFromCart, clearCart } = useCart();
-  const { user } = useAuth();
+  const dispatch = useDispatch();
+  const { items: cartItems, restaurant, total, subtotal, deliveryFee } = useSelector((state) => state.cart);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
   if (cartItems.length === 0) {
     return (
@@ -30,12 +31,8 @@ const CartScreen = ({ navigation }) => {
     );
   }
 
-  const deliveryFee = restaurant?.deliveryFee || 10;
-  const subtotal = getCartTotal();
-  const total = subtotal + deliveryFee;
-
   const handleCheckout = () => {
-    if (!user) {
+    if (!isAuthenticated || !user) {
       navigation.navigate('Login');
       return;
     }
@@ -50,7 +47,7 @@ const CartScreen = ({ navigation }) => {
           <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Sepetim</Text>
-        <TouchableOpacity onPress={clearCart}>
+        <TouchableOpacity onPress={() => dispatch(clearCart())}>
           <Text style={styles.clearText}>Temizle</Text>
         </TouchableOpacity>
       </View>
