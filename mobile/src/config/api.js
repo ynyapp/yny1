@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = 'https://yemek-rehberi-2.preview.emergentagent.com';
+const API_BASE_URL = 'https://foodspotter-tr.preview.emergentagent.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

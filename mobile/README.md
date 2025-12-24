@@ -128,7 +128,7 @@ npm start
 ## 🔗 API Entegrasyonu
 
 Uygulama production backend'e bağlı:
-- **Base URL:** `https://yemek-rehberi-2.preview.emergentagent.com`
+- **Base URL:** `https://foodspotter-tr.preview.emergentagent.com`
 - **Endpoints:**
   - `GET /api/restaurants` - Restaurant list
   - `GET /api/restaurants/id/:id` - Restaurant detail
