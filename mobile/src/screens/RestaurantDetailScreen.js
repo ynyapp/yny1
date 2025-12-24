@@ -10,16 +10,18 @@ import {
   SectionList,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRestaurantDetail } from '../store/slices/restaurantSlice';
+import { addToCart, removeFromCart } from '../store/slices/cartSlice';
 import { restaurantService } from '../services/restaurantService';
-import { useCart } from '../contexts/CartContext';
 import MenuItem from '../components/MenuItem';
 
 const RestaurantDetailScreen = ({ route, navigation }) => {
   const { restaurantId } = route.params;
-  const [restaurant, setRestaurant] = useState(null);
+  const dispatch = useDispatch();
+  const { selectedRestaurant: restaurant, loading } = useSelector((state) => state.restaurant);
+  const { items: cartItems } = useSelector((state) => state.cart);
   const [menu, setMenu] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const { addToCart, removeFromCart, cartItems, getCartCount } = useCart();
 
   useEffect(() => {
     loadRestaurantData();
@@ -27,12 +29,8 @@ const RestaurantDetailScreen = ({ route, navigation }) => {
 
   const loadRestaurantData = async () => {
     try {
-      setLoading(true);
-      const [restaurantData, menuData] = await Promise.all([
-        restaurantService.getRestaurantById(restaurantId),
-        restaurantService.getRestaurantMenu(restaurantId),
-      ]);
-      setRestaurant(restaurantData);
+      await dispatch(fetchRestaurantDetail(restaurantId));
+      const menuData = await restaurantService.getRestaurantMenu(restaurantId);
       
       // Group menu by category
       const grouped = (menuData || []).reduce((acc, item) => {
