@@ -1,243 +1,269 @@
-# Yemek Nerede Yenir - React Native Mobil Uygulama
+# 📱 Yemek Nerede Yenir - Mobil Uygulama
 
-## 📱 Proje Hakkında
-
-Yemek Nerede Yenir platformunun React Native mobil uygulaması. Zomato tarzında tasarlanmış, kullanıcı dostu bir yemek sipariş uygulaması.
+React Native (Expo) tabanlı yemek sipariş ve restoran keşif uygulaması.
 
 ## 🚀 Özellikler
 
 ### ✅ Tamamlanan Özellikler
+- 🔐 **Authentication**: Giriş, Kayıt, Çıkış
+- 🏠 **Ana Sayfa**: Restoran listesi, Koleksiyonlar
+- 🍽️ **Restoran Detay**: Restoran bilgileri, Menü
+- 🛒 **Sepet**: Ürün ekleme/çıkarma, Toplam hesaplama
+- 👤 **Profil**: Kullanıcı bilgileri, Çıkış yapma
+- 🔄 **Redux State Management**: Merkezi state yönetimi
+- 💾 **Redux Persist**: Oturum kalıcılığı
 
-- **Ana Sayfa (Home)**
-  - Konum seçimi
-  - Arama çubuğu
-  - Mutfak kategorileri (Pizza, Burger, Balık, vb.)
-  - Koleksiyonlar (horizontal scroll)
-  - Popüler restoranlar listesi
+### ⏳ Yapım Aşamasında
+- 💳 Checkout Flow
+- 📋 Sipariş Geçmişi
+- 🎫 Rezervasyonlar
+- ⭐ Yorumlar
+- 🗺️ Harita Entegrasyonu
+- 🔔 Bildirimler
 
-- **Restaurant Detay**
-  - Hero image
-  - Restaurant bilgileri (rating, delivery time, price range)
-  - Offers & badges (Promoted, Gold, discount)
-  - Kategorize edilmiş menü
-  - Sepete ekleme (+/- controls)
-  - Sticky cart button
+## 🛠️ Teknoloji Stack
 
-- **Arama (Search)**
-  - Gerçek zamanlı arama
-  - Quick filters (4.0+, 4.5+ rating)
-  - Mutfak filtreleme
-  - Sonuç listesi
+- **Framework**: React Native (Expo)
+- **State Management**: Redux Toolkit + Redux Persist
+- **Navigation**: React Navigation (Stack + Bottom Tabs)
+- **API Client**: Axios
+- **UI Icons**: Expo Vector Icons (Ionicons)
+- **Storage**: AsyncStorage
 
-- **Sepet (Cart)**
-  - Sepet ürünleri listesi
-  - Quantity kontrolleri
-  - Fatura detayları (subtotal, delivery, total)
-  - Checkout butonu
-  - Empty state
-
-- **Profil**
-  - Kullanıcı bilgileri
-  - Menü items (Siparişlerim, Adreslerim, Ödeme Yöntemlerim, vb.)
-  - Logout
-  - Login ekranına yönlendirme
-
-- **State Management**
-  - Auth Context (login, register, logout)
-  - Cart Context (add, remove, clear, total calculation)
-  - AsyncStorage persistence
-
-- **UI Components**
-  - RestaurantCard (badges, ratings, offers)
-  - MenuItem (quantity controls)
-  - Bottom Tab Navigation
-  - Stack Navigation
-
-## 📂 Proje Yapısı
-
-```
-mobile/
-├── src/
-│   ├── config/
-│   │   └── api.js                    # Axios configuration
-│   ├── contexts/
-│   │   ├── AuthContext.js            # Authentication state
-│   │   └── CartContext.js            # Cart state
-│   ├── services/
-│   │   ├── authService.js            # Auth API calls
-│   │   └── restaurantService.js      # Restaurant API calls
-│   ├── components/
-│   │   ├── RestaurantCard.js         # Restaurant list item
-│   │   └── MenuItem.js               # Menu item with add/remove
-│   └── screens/
-│       ├── HomeScreen.js             # Home page
-│       ├── SearchScreen.js           # Search & filters
-│       ├── RestaurantDetailScreen.js # Restaurant detail & menu
-│       ├── CartScreen.js             # Shopping cart
-│       ├── ProfileScreen.js          # User profile
-│       └── LoginScreen.js            # Login/Register
-├── App.js                            # Navigation setup
-├── app.json                          # Expo configuration
-└── package.json
-```
-
-## 🛠️ Teknolojiler
-
-- **React Native** - Cross-platform mobile framework
-- **Expo** - Development platform
-- **React Navigation** - Navigation library
-  - Bottom Tabs
-  - Stack Navigator
-- **Axios** - HTTP client
-- **AsyncStorage** - Local storage
-- **Context API** - State management
-- **Ionicons** - Icon library
-
-## 🚀 Kurulum ve Çalıştırma
+## 📦 Kurulum
 
 ### Gereksinimler
-- Node.js 16+
-- npm veya yarn
-- Expo CLI (optional)
-- iOS Simulator (Mac için) veya Android Emulator
-- Expo Go app (Physical device testing için)
+- Node.js v16+
+- Yarn
+- Expo Go (iOS/Android)
 
 ### Adımlar
-
-1. **Dependencies kurulumu:**
 ```bash
-cd mobile
-npm install
+# Klasöre gidin
+cd /app/mobile
+
+# Bağımlılıkları yükleyin
+yarn install
+
+# Uygulamayı başlatın
+yarn start
 ```
 
-2. **Development server başlatma:**
-```bash
-npm start
+### Expo Go ile Test
+1. Telefonunuzda **Expo Go** uygulamasını indirin
+2. Terminal'deki **QR kodu** tarayın
+3. Uygulama yüklenecek
+
+## 📁 Proje Yapısı
+
+```
+/app/mobile/
+├── src/
+│   ├── components/        # Reusable components
+│   │   ├── RestaurantCard.js
+│   │   └── MenuItem.js
+│   ├── screens/          # Screen components
+│   │   ├── HomeScreen.js
+│   │   ├── LoginScreen.js
+│   │   ├── RegisterScreen.js
+│   │   ├── RestaurantDetailScreen.js
+│   │   ├── CartScreen.js
+│   │   ├── ProfileScreen.js
+│   │   └── SearchScreen.js
+│   ├── services/         # API services
+│   │   ├── authService.js
+│   │   ├── restaurantService.js
+│   │   ├── orderService.js
+│   │   ├── reservationService.js
+│   │   ├── reviewService.js
+│   │   ├── userService.js
+│   │   ├── campaignService.js
+│   │   ├── collectionService.js
+│   │   └── geoService.js
+│   ├── store/            # Redux store
+│   │   ├── index.js
+│   │   └── slices/
+│   │       ├── authSlice.js
+│   │       ├── restaurantSlice.js
+│   │       ├── cartSlice.js
+│   │       ├── orderSlice.js
+│   │       ├── reservationSlice.js
+│   │       ├── reviewSlice.js
+│   │       └── userSlice.js
+│   ├── contexts/         # Legacy contexts (migration to Redux in progress)
+│   │   ├── AuthContext.js
+│   │   └── CartContext.js
+│   └── config/           # Configuration
+│       └── api.js        # Axios configuration
+├── App.js               # Root component
+├── package.json
+└── README.md
 ```
 
-3. **Platform seçimi:**
-- iOS: `i` tuşuna basın veya `npm run ios`
-- Android: `a` tuşuna basın veya `npm run android`
-- Web: `w` tuşuna basın veya `npm run web`
+## 🔧 Yapılandırma
 
-4. **Expo Go ile test:**
-- Expo Go app'i indirin (iOS/Android)
-- QR kodu tarayın
-- Uygulamayı cihazınızda test edin
+### API Endpoint
+Backend API URL: `/app/mobile/src/config/api.js`
 
-## 🔗 API Entegrasyonu
-
-Uygulama production backend'e bağlı:
-- **Base URL:** `https://foodspotter-tr.preview.emergentagent.com`
-- **Endpoints:**
-  - `GET /api/restaurants` - Restaurant list
-  - `GET /api/restaurants/id/:id` - Restaurant detail
-  - `GET /api/menu/:restaurantId` - Restaurant menu
-  - `GET /api/collections/` - Collections
-  - `POST /api/auth/login` - User login
-  - `POST /api/auth/register` - User registration
-
-## 🎨 Design System
-
-### Colors
-- **Primary:** `#DC2626` (Red)
-- **Background:** `#F5F5F5` (Light Gray)
-- **Text:** `#333` (Dark Gray)
-- **Border:** `#E0E0E0` (Light Border)
-
-### Typography
-- **Title:** 32px, Bold
-- **Heading:** 18-20px, Bold
-- **Body:** 14-15px, Regular
-- **Caption:** 11-13px, Regular
-
-## 📱 Ekran Görüntüleri
-
-### Home Screen
-- Location selector
-- Search bar
-- Cuisine categories
-- Collections carousel
-- Restaurant list with badges
-
-### Restaurant Detail
-- Hero image
-- Restaurant info
-- Offers & promotions
-- Categorized menu
-- Add to cart functionality
-
-### Cart
-- Cart items with quantity controls
-- Bill breakdown
-- Checkout button
-
-### Profile
-- User info
-- Menu options
-- Logout
-
-## 🔐 Authentication
-
-- JWT token based authentication
-- Token stored in AsyncStorage
-- Auto-logout on 401
-- Auth context for global state
-
-## 🛒 Cart Management
-
-- Multi-item cart
-- Quantity controls
-- Restaurant switching (clear cart)
-- Persistent storage
-- Total calculation
-
-## 📦 Production Build
-
-### iOS (MacOS gerekli)
-```bash
-npx expo build:ios
+```javascript
+const API_BASE_URL = 'https://foodspotter-tr.preview.emergentagent.com';
 ```
 
-### Android
-```bash
-npx expo build:android
+**Not**: Production URL kullanıyoruz. Mobil uygulamalar `localhost` kullanamaz!
+
+### Redux Store
+Store yapılandırması: `/app/mobile/src/store/index.js`
+
+**Persist edilen state'ler:**
+- `auth` - Kullanıcı oturumu
+- `cart` - Sepet bilgileri
+
+## 📱 Ekranlar
+
+### 1. Home Screen
+- Restoran listesi
+- Koleksiyonlar
+- Mutfak kategorileri
+- Pull to refresh
+- **Redux Entegrasyonu**: ✅
+
+### 2. Login/Register Screen
+- Kullanıcı girişi
+- Yeni hesap oluşturma
+- Form validation
+- **Redux Entegrasyonu**: ✅
+
+### 3. Restaurant Detail Screen
+- Restoran bilgileri
+- Menü görüntüleme
+- Yorumlar (yapım aşamasında)
+- **Redux Entegrasyonu**: ⏳
+
+### 4. Cart Screen
+- Sepet içeriği
+- Miktar kontrolü
+- Toplam hesaplama
+- Checkout (yapım aşamasında)
+- **Redux Entegrasyonu**: ✅
+
+### 5. Profile Screen
+- Kullanıcı bilgileri
+- Menü öğeleri
+- Çıkış yapma
+- **Redux Entegrasyonu**: ✅
+
+## 🔐 Authentication Flow
+
+```
+Register → Login → Store Token → Persist → Auto-Login
 ```
 
-### Using EAS Build (Recommended)
-```bash
-npm install -g eas-cli
-eas build --platform android
-eas build --platform ios
+1. Kullanıcı kayıt olur (`RegisterScreen`)
+2. Backend token döner
+3. Token AsyncStorage'a kaydedilir
+4. Redux store'a kullanıcı bilgileri eklenir
+5. Redux Persist token'ı kalıcı hale getirir
+6. Uygulama tekrar açıldığında auto-login
+
+## 🛒 Cart Flow
+
+```
+Add Item → Check Restaurant → Update Cart → Calculate Total
 ```
 
-## 🚧 Gelecek Özellikler
+1. Kullanıcı menü öğesine "Ekle" yapar
+2. Farklı restorandan ise sepet temizlenir
+3. Redux store güncellenir
+4. Toplam otomatik hesaplanır
 
-- [ ] Order tracking with map
-- [ ] Payment integration
-- [ ] Push notifications
-- [ ] Reviews & ratings
-- [ ] Favorites
+## 🧪 Test
+
+Test rehberi için: [TESTING_GUIDE.md](./TESTING_GUIDE.md)
+
+### Hızlı Test
+```bash
+yarn start
+
+# Expo Go ile QR kodu tarayın
+# Test senaryolarını çalıştırın
+```
+
+## 🚧 Bilinen Sorunlar
+
+1. **Checkout Flow**: Henüz tamamlanmadı
+2. **Order History**: Yapım aşamasında
+3. **Reservations**: Yapım aşamasında
+4. **Reviews**: UI tamamlanmadı
+5. **Maps**: Entegrasyon yapılacak
+
+## 📊 İlerleme Durumu
+
+**Tamamlanma**: ~65%
+
+| Özellik | Durum | Tamamlanma |
+|---------|-------|------------|
+| Authentication | ✅ | %100 |
+| Home Screen | ✅ | %90 |
+| Restaurant Detail | ⏳ | %60 |
+| Cart | ✅ | %85 |
+| Profile | ✅ | %80 |
+| Checkout | ⏳ | %0 |
+| Orders | ⏳ | %0 |
+| Reservations | ⏳ | %0 |
+| Reviews | ⏳ | %30 |
+| Maps | ⏳ | %0 |
+
+## 🎯 Roadmap
+
+### Phase 1 (Tamamlandı ✅)
+- [x] Authentication screens
+- [x] Home screen
+- [x] Restaurant list
+- [x] Cart management
+- [x] Redux migration
+
+### Phase 2 (Mevcut Sprint)
+- [ ] Checkout flow
 - [ ] Order history
-- [ ] Address management
-- [ ] Multiple payment methods
-- [ ] Coupon/Promo codes
-- [ ] Real-time order updates
+- [ ] Reservations
+- [ ] Reviews UI
 
-## 📞 Destek
+### Phase 3 (Gelecek)
+- [ ] Maps integration
+- [ ] Notifications
+- [ ] Image upload
+- [ ] Advanced filters
+- [ ] Favorites
 
-Herhangi bir sorunla karşılaşırsanız:
-1. Expo logs kontrol edin: `npm start`
-2. Metro bundler restart: `r` tuşu
-3. Cache clear: `npm start -- --clear`
+## 🤝 Katkıda Bulunma
+
+1. Değişiklikleri yapın
+2. Test edin (TESTING_GUIDE.md)
+3. Commit edin
+4. Pull request oluşturun
 
 ## 📝 Notlar
 
-- Development modda hot reload aktif
-- AsyncStorage'da cart ve auth data persist ediliyor
-- API errors console'da loglanıyor
-- Images placeholder olarak Unsplash kullanılabilir
+- **Redux kullanıyoruz**: Context API'den Redux'a geçiş yapıldı
+- **Production URL**: Mobil uygulama production URL kullanır
+- **AsyncStorage**: Token ve user bilgileri AsyncStorage'da
+- **Expo Go**: Development için Expo Go kullanıyoruz
 
-## 🎉 Tamamlandı!
+## 🐛 Hata Bildirimi
 
-React Native mobil uygulama production-ready durumda! Zomato tarzında tasarlanmış, tam fonksiyonel bir food delivery platformu.
+Hata bulursanız:
+1. Console log'ları kontrol edin
+2. Redux store'u inceleyin
+3. Backend'in çalıştığını doğrulayın
+4. TESTING_GUIDE.md'ye bakın
+
+## 📞 Destek
+
+- Backend API: `https://foodspotter-tr.preview.emergentagent.com/api`
+- Swagger Docs: `https://foodspotter-tr.preview.emergentagent.com/docs`
+
+---
+
+**Son Güncelleme**: 24 Aralık 2025  
+**Versiyon**: 1.0.0  
+**Durum**: Development 🚧
