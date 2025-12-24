@@ -41,9 +41,7 @@ const SearchScreen = ({ navigation, route }) => {
       };
       await dispatch(searchRestaurants(params)).unwrap();
     } catch (error) {
-      console.error('Error searching:', error);
-    } finally {
-      setLoading(false);
+      Alert.alert('Hata', 'Arama yapılamadı');
     }
   };
 
