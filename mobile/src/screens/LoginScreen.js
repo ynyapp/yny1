@@ -8,14 +8,16 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
-import { useAuth } from '../contexts/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../store/slices/authSlice';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -24,13 +26,11 @@ const LoginScreen = ({ navigation }) => {
     }
 
     try {
-      setLoading(true);
-      await login(email, password);
+      const result = await dispatch(login({ email, password })).unwrap();
+      Alert.alert('Başarılı', 'Giriş yapıldı!');
       navigation.goBack();
     } catch (error) {
-      Alert.alert('Giriş Hatası', error.response?.data?.detail || 'İstisna giriş bilgileri');
-    } finally {
-      setLoading(false);
+      Alert.alert('Giriş Hatası', error || 'Geçersiz giriş bilgileri');
     }
   };
 
@@ -51,6 +51,7 @@ const LoginScreen = ({ navigation }) => {
             onChangeText={setEmail}
             autoCapitalize="none"
             keyboardType="email-address"
+            editable={!loading}
           />
           <TextInput
             style={styles.input}
@@ -58,6 +59,7 @@ const LoginScreen = ({ navigation }) => {
             value={password}
             onChangeText={setPassword}
             secureTextEntry
+            editable={!loading}
           />
 
           <TouchableOpacity
@@ -65,9 +67,11 @@ const LoginScreen = ({ navigation }) => {
             onPress={handleLogin}
             disabled={loading}
           >
-            <Text style={styles.loginButtonText}>
-              {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
-            </Text>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.loginButtonText}>Giriş Yap</Text>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity>
@@ -77,7 +81,7 @@ const LoginScreen = ({ navigation }) => {
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>Hesabınız yok mu?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <Text style={styles.registerText}> Kayıt Olun</Text>
           </TouchableOpacity>
         </View>
