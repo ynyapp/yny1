@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../contexts/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../store/slices/authSlice';
 
 const ProfileScreen = ({ navigation }) => {
-  const { user, logout } = useAuth();
+  const dispatch = useDispatch();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-  if (!user) {
+  if (!isAuthenticated || !user) {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -36,7 +38,7 @@ const ProfileScreen = ({ navigation }) => {
   ];
 
   const handleLogout = async () => {
-    await logout();
+    await dispatch(logout());
   };
 
   return (
@@ -49,9 +51,9 @@ const ProfileScreen = ({ navigation }) => {
         {/* User Info */}
         <View style={styles.userInfo}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{user.username?.charAt(0).toUpperCase()}</Text>
+            <Text style={styles.avatarText}>{user.name?.charAt(0).toUpperCase()}</Text>
           </View>
-          <Text style={styles.userName}>{user.username}</Text>
+          <Text style={styles.userName}>{user.name}</Text>
           <Text style={styles.userEmail}>{user.email}</Text>
         </View>
 
