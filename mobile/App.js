@@ -4,7 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text } from 'react-native';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { store, persistor } from './src/store';
 import { AuthProvider } from './src/contexts/AuthContext';
 import { CartProvider } from './src/contexts/CartContext';
 
@@ -96,12 +100,18 @@ function MainTabs() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <NavigationContainer>
-          <MainTabs />
-        </NavigationContainer>
-      </CartProvider>
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <AuthProvider>
+            <CartProvider>
+              <NavigationContainer>
+                <MainTabs />
+              </NavigationContainer>
+            </CartProvider>
+          </AuthProvider>
+        </PersistGate>
+      </Provider>
+    </GestureHandlerRootView>
   );
 }
