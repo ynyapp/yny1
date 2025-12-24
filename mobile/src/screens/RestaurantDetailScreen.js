@@ -50,8 +50,6 @@ const RestaurantDetailScreen = ({ route, navigation }) => {
       setMenu(sections);
     } catch (error) {
       console.error('Error loading restaurant:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
