@@ -33,9 +33,9 @@ const ProfileScreen = ({ navigation }) => {
     { icon: 'receipt-outline', title: 'Siparişlerim', onPress: () => navigation.navigate('OrderHistory') },
     { icon: 'location-outline', title: 'Adreslerim', onPress: () => navigation.navigate('Addresses') },
     { icon: 'calendar-outline', title: 'Rezervasyonlarım', onPress: () => navigation.navigate('Reservations') },
-    { icon: 'heart-outline', title: 'Favorilerim', onPress: () => {} },
-    { icon: 'settings-outline', title: 'Ayarlar', onPress: () => {} },
-    { icon: 'help-circle-outline', title: 'Yardım', onPress: () => {} },
+    { icon: 'heart-outline', title: 'Favorilerim', onPress: () => navigation.navigate('Favorites') },
+    { icon: 'settings-outline', title: 'Ayarlar', onPress: () => navigation.navigate('Settings') },
+    { icon: 'help-circle-outline', title: 'Yardım', onPress: () => navigation.navigate('Help') },
   ];
 
   const handleLogout = async () => {
