@@ -9,8 +9,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { store, persistor } from './src/store';
-import { AuthProvider } from './src/contexts/AuthContext';
-import { CartProvider } from './src/contexts/CartContext';
 
 // Screens
 import HomeScreen from './src/screens/HomeScreen';
@@ -105,13 +103,9 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <AuthProvider>
-            <CartProvider>
-              <NavigationContainer>
-                <MainTabs />
-              </NavigationContainer>
-            </CartProvider>
-          </AuthProvider>
+          <NavigationContainer>
+            <MainTabs />
+          </NavigationContainer>
         </PersistGate>
       </Provider>
     </GestureHandlerRootView>
