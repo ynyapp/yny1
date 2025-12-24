@@ -29,9 +29,10 @@ const ProfileScreen = ({ navigation }) => {
   }
 
   const menuItems = [
-    { icon: 'receipt-outline', title: 'Siparişlerim', onPress: () => {} },
-    { icon: 'location-outline', title: 'Adreslerim', onPress: () => {} },
-    { icon: 'card-outline', title: 'Ödeme Yöntemlerim', onPress: () => {} },
+    { icon: 'person-outline', title: 'Profili Düzenle', onPress: () => navigation.navigate('EditProfile') },
+    { icon: 'receipt-outline', title: 'Siparişlerim', onPress: () => navigation.navigate('OrderHistory') },
+    { icon: 'location-outline', title: 'Adreslerim', onPress: () => navigation.navigate('Addresses') },
+    { icon: 'calendar-outline', title: 'Rezervasyonlarım', onPress: () => navigation.navigate('Reservations') },
     { icon: 'heart-outline', title: 'Favorilerim', onPress: () => {} },
     { icon: 'settings-outline', title: 'Ayarlar', onPress: () => {} },
     { icon: 'help-circle-outline', title: 'Yardım', onPress: () => {} },
