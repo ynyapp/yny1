@@ -8,35 +8,35 @@ import {
   TextInput,
   FlatList,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { restaurantService } from '../services/restaurantService';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRestaurants, fetchCollections } from '../store/slices/restaurantSlice';
 import RestaurantCard from '../components/RestaurantCard';
 
 const HomeScreen = ({ navigation }) => {
-  const [restaurants, setRestaurants] = useState([]);
-  const [collections, setCollections] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { restaurants, collections, loading, error } = useSelector((state) => state.restaurant);
   const [searchQuery, setSearchQuery] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     loadData();
   }, []);
 
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      const [restaurantsData, collectionsData] = await Promise.all([
-        restaurantService.getRestaurants({ city: 'İstanbul', page_size: 20 }),
-        restaurantService.getCollections(),
-      ]);
-      setRestaurants(restaurantsData.items || restaurantsData);
-      setCollections(collectionsData || []);
-    } catch (error) {
-      console.error('Error loading data:', error);
-    } finally {
-      setLoading(false);
-    }
+  const loadData = () => {
+    dispatch(fetchRestaurants({ city: 'İstanbul', page_size: 20 }));
+    dispatch(fetchCollections());
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await Promise.all([
+      dispatch(fetchRestaurants({ city: 'İstanbul', page_size: 20 })),
+      dispatch(fetchCollections())
+    ]);
+    setRefreshing(false);
   };
 
   const cuisineCategories = [
