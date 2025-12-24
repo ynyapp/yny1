@@ -128,8 +128,8 @@ const RestaurantDetailScreen = ({ route, navigation }) => {
                   key={item.id}
                   item={item}
                   quantity={getItemQuantity(item.id)}
-                  onAdd={() => addToCart(item, restaurant)}
-                  onRemove={() => removeFromCart(item.id)}
+                  onAdd={() => dispatch(addToCart({ item, restaurant }))}
+                  onRemove={() => dispatch(removeFromCart(item.id))}
                 />
               ))}
             </View>
@@ -138,13 +138,15 @@ const RestaurantDetailScreen = ({ route, navigation }) => {
       </ScrollView>
 
       {/* Cart Button */}
-      {getCartCount() > 0 && (
+      {cartItems.length > 0 && (
         <TouchableOpacity
           style={styles.cartButton}
           onPress={() => navigation.navigate('Cart')}
         >
           <View style={styles.cartBadge}>
-            <Text style={styles.cartBadgeText}>{getCartCount()}</Text>
+            <Text style={styles.cartBadgeText}>
+              {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+            </Text>
           </View>
           <Text style={styles.cartButtonText}>Sepete Git</Text>
           <Ionicons name="arrow-forward" size={20} color="#fff" />
