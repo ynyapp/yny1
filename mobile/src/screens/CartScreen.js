@@ -76,14 +76,14 @@ const CartScreen = ({ navigation }) => {
               <View style={styles.quantityControls}>
                 <TouchableOpacity
                   style={styles.quantityButton}
-                  onPress={() => removeFromCart(item.id)}
+                  onPress={() => dispatch(removeFromCart(item.id))}
                 >
                   <Ionicons name="remove" size={16} color="#DC2626" />
                 </TouchableOpacity>
                 <Text style={styles.quantityText}>{item.quantity}</Text>
                 <TouchableOpacity
                   style={styles.quantityButton}
-                  onPress={() => addToCart(item, restaurant)}
+                  onPress={() => dispatch(addToCart({ item, restaurant }))}
                 >
                   <Ionicons name="add" size={16} color="#DC2626" />
                 </TouchableOpacity>
