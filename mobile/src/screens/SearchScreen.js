@@ -7,36 +7,39 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { restaurantService } from '../services/restaurantService';
+import { useDispatch, useSelector } from 'react-redux';
+import { searchRestaurants } from '../store/slices/restaurantSlice';
 import RestaurantCard from '../components/RestaurantCard';
 
 const SearchScreen = ({ navigation, route }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [restaurants, setRestaurants] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
     cuisine: route.params?.cuisine || '',
     minRating: 0,
   });
 
+  const dispatch = useDispatch();
+  const { searchResults, loading } = useSelector((state) => state.restaurant);
+
   useEffect(() => {
-    if (filters.cuisine) {
-      searchRestaurants();
+    if (filters.cuisine || searchQuery.trim()) {
+      handleSearch();
     }
   }, [filters]);
 
-  const searchRestaurants = async () => {
+  const handleSearch = async () => {
+    if (!searchQuery.trim() && !filters.cuisine) return;
+    
     try {
-      setLoading(true);
       const params = {
         search: searchQuery,
         cuisine: filters.cuisine,
         min_rating: filters.minRating || undefined,
       };
-      const data = await restaurantService.getRestaurants(params);
-      setRestaurants(data.items || data);
+      await dispatch(searchRestaurants(params)).unwrap();
     } catch (error) {
       console.error('Error searching:', error);
     } finally {
@@ -107,7 +110,7 @@ const SearchScreen = ({ navigation, route }) => {
         </View>
       ) : (
         <FlatList
-          data={restaurants}
+          data={searchResults}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <RestaurantCard
