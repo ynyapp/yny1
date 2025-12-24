@@ -36,8 +36,7 @@ const CartScreen = ({ navigation }) => {
       navigation.navigate('Login');
       return;
     }
-    // Navigate to checkout
-    alert('Checkout ekranı yapım aşamasında');
+    navigation.navigate('Checkout');
   };
 
   return (
